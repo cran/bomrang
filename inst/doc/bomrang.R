@@ -27,8 +27,8 @@ head(sweep_for_stations(latlon = c(-35.3, 149.2)), 10)
 ## ---- eval = FALSE-------------------------------------------------------
 #  paste0(.libPaths(), "/bomrang/extdata")[1]
 
-## ----update_forecast_locations, eval=FALSE-------------------------------
-#  update_forecast_locations()
+## ----update_forecast_towns, eval=FALSE-----------------------------------
+#  update_forecast_towns()
 
 ## ----update_station_locations, eval=FALSE--------------------------------
 #  update_station_locations()
@@ -50,7 +50,7 @@ head(sweep_for_stations(latlon = c(-35.3, 149.2)), 10)
 #  library(raster)
 #  plot(i)
 
-## ----station-locations-map, fig.width = 7, fig.height = 7, message = FALSE----
+## ----station-locations-map, fig.width = 7, fig.height = 5, message = FALSE----
 if (requireNamespace("ggplot2", quietly = TRUE) &&
     requireNamespace("ggthemes", quietly = TRUE) &&
     requireNamespace("maps", quietly = TRUE) &&

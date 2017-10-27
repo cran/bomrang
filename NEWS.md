@@ -1,4 +1,28 @@
-0.0.7
+# bomrang 0.0.8
+
+## Major changes
+
+- Antarctic stations reporting with a valid .json file are now included in
+internal database
+
+## Minor changes
+
+- Fix typo in DESCRIPTION, Scott's ORCID wasn't given as a full URL
+
+- Update authors in vignettes to credit everyone who helped write them
+
+- Update vignette style to use normal vignette style with table of contents
+
+- Fix error in vignette that referred to `update_forecast_locations()`, it
+should instead refer to `update_forecast_towns()`
+
+- Update internal stations list with latest data from BoM
+
+## Bug fixes
+
+- Fix issue where updating internal stations would fail
+
+# bomrang 0.0.7
 
 ## Major changes
 
@@ -156,7 +180,7 @@ taking too long to run
 
 - Run examples for all `get_*` functions in package
 
-- `update_precis_locations()` is now `update_forecast_locations()`
+- `update_precis_locations()` is now `update_forecast_towns()`
 
 --------------------------------------------------------------------------------
 
