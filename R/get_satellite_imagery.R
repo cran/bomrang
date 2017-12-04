@@ -1,6 +1,4 @@
 
-# get_available_imagery() -------------------------------------------------------
-
 #' Get a Listing of Available BoM Satellite GeoTIFF Imagery
 #'
 #' Fetch a listing of BoM GeoTIFF satellite imagery from
@@ -84,7 +82,7 @@ get_available_imagery <- function(product_id = "all") {
 #' @param cache Logical.  Store image files locally for later use?  If
 #' \code{FALSE}, the downloaded files are removed when R session is closed. To
 #' take advantage of cached files in future sessions, use \code{cache = TRUE}.
-#' Defaults to \code{FALSE}. Value is optional.
+#' Defaults to \code{FALSE}.  Value is optional.
 #'
 #' @details Valid BoM satellite Product IDs include:
 #'\describe{
@@ -109,8 +107,13 @@ get_available_imagery <- function(product_id = "all") {
 #' \item{IDE00439}{AHI VIS (Ch3) greyscale 0.5km AUS equirect. GIS}
 #'}
 #'
+#' We cache using \pkg{hoardr}, find your cache folder by executing
+#' \code{manage_cache$cache_path_get}.
+#'
+#'
 #'@seealso
 #'\code{\link{get_available_imagery}}
+#'\code{\link{manage_cache}}
 #'
 #' @return
 #' A raster stack of GeoTIFF images with layers named by BoM Product ID,
@@ -145,7 +148,7 @@ get_satellite_imagery <-
       stop("\nYou must select a valid BoM satellite imagery Product ID.\n")
     }
     if (length(unique(substr(product_id, 1, 8))) != 1) {
-      stop("/nbomrang only supports working with one Product ID at a time\n")
+      stop("\nbomrang only supports working with one Product ID at a time\n")
     }
 
     ftp_base <- "ftp://ftp.bom.gov.au/anon/gen/gms/"

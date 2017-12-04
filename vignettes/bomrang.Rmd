@@ -34,7 +34,7 @@ satellite imagery, `get_available_imagery()` and the imagery itself,
 functionality for _bomrang_ itself; `update_forecast_towns()`, which updates
 an internal database of forecast locations distributed with the package, 
 `sweep_for_stations()` which returns the nearest weather stations to a point in
-Australia and, `manage_cached_files()` that provides facilities for managing
+Australia and, `manage_cache()` that provides facilities for managing
 cached satellite imagery.
 
 ## Using `get_current_weather`
@@ -348,7 +348,7 @@ argument is optional.
 locally for later use?  If `FALSE`, the downloaded files are removed when R
 session is closed. To take advantage of cached files in future sessions, set 
 `TRUE`. Defaults to `FALSE`. This argument is optional. Cached files may be
-managed with the `manage_bomrang_cache()` function.
+managed with the `manage_cache()` function.
 
 ```{r get_satellite_imagery, eval=FALSE}
 # Specify product ID and scans
@@ -376,19 +376,23 @@ files can be quite large and will fill disk space. By using the default
 Should you chose to use caching, _bomrang_ provided functions to interact with
 the cached files:
 
-- List files in the cache, `bomrang_cache_list()`
+- List files in the cache, `manage_cache$list()`
   
     - List info for single files,
   
-        - `bomrang_cache_details(files = bomrang_cache_list()[1])`
+        - `manage_cache$list()[1])`
   
-        - `bomrang_cache_details(files = bomrang_cache_list()[2])`
+        - `manage_cache$list()[2])`
 
-- List info for all files, `bomrang_cache_details()`
+- List info for all files, `manage_cache$details()`
 
-- Delete files by name in cache, `bomrang_cache_delete()`
+- Delete files by name in cache, `manage_cache$delete()`
 
-- Delete all files in cache, `bomrang_cache_delete_all()`
+- Delete all files in cache, `manage_cache$delete_all()`
+
+To access the files directly, outside of R, the following command will give you the location of the directory:
+
+`manage_cache$cache_path_get()`
 
 ## References
 

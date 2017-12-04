@@ -2,7 +2,7 @@
 library(bomrang)
 
 ## ----install_packages, eval=FALSE----------------------------------------
-#  devtools::install_github("toowoombatrio/bomrang")
+#  install.packages("bomrang")
 #  install.packages("mailR")
 #  library(dplyr)  # filter()
 #  library(bomrang)
