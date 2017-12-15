@@ -1,4 +1,4 @@
-*bomrang*: Fetch Australian Government Bureau of Meteorology (BoM) Data
+*bomrang*: Australian Government Bureau of Meteorology Data from R
 ================
 
 [![Travis-CI Build Status](https://travis-ci.org/ropensci/bomrang.svg?branch=master)](https://travis-ci.org/ropensci/bomrang) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/ropensci/bomrang?branch=master&svg=true)](https://ci.appveyor.com/project/ropensci/bomrang) [![codecov](https://codecov.io/gh/ropensci/bomrang/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/bomrang) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.598301.svg)](https://doi.org/10.5281/zenodo.598301)
@@ -6,7 +6,7 @@
 [![](https://badges.ropensci.org/121_status.svg)](https://github.com/ropensci/onboarding/issues/121)
 [![status](http://joss.theoj.org/papers/350bf005bded599e4b0f3ac2acf138e8/status.svg)](http://joss.theoj.org/papers/350bf005bded599e4b0f3ac2acf138e8)
 
-Provides functions to interface with Australian Government Bureau of Meteorology (BoM) data, fetching data and returning a tidy data frame of précis forecasts, current weather data from stations, ag information bulletins or a `raster::stack()` object of satellite imagery from GeoTIFF files.
+<img align="right" src="man/figures/bomrang-hex.png"> Provides functions to interface with Australian Government Bureau of Meteorology (BoM) data, fetching data and returning a tidy data frame of précis forecasts, current weather data from stations, ag information bulletins or a `raster::stack()` object of satellite imagery from GeoTIFF files.
 
 Credit for the name, *bomrang*, goes to [Di Cook](http://dicook.github.io), who suggested it while attending the rOpenSci AUUnconf in Brisbane, 2016, upon seeing the [vignette](https://github.com/saundersk1/auunconf16/blob/master/Vignette_BoM.pdf) that we had assembled during the Unconf.
 
@@ -511,8 +511,8 @@ Meta
 
     or the BibTeX entry:
 
-    ```tex
-    @article{HSparks2017,
+    ```
+    @article{AHSparks2017,
     doi = {10.21105/joss.00411},
     url = {https://doi.org/10.21105/joss.00411},
     year  = {2017},
@@ -523,7 +523,6 @@ Meta
     author = {Adam H Sparks and Mark Padgham and Hugh Parsonage and Keith Pembleton},
     title = {bomrang: Fetch Australian Government Bureau of Meteorology Data in R},
     journal = {The Journal of Open Source Software}
-}
     ```
 
 -   Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
