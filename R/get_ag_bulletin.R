@@ -1,8 +1,7 @@
 
-
-#' Get BoM Agriculture Bulletin Information for Select Stations
+#' Get BOM Agriculture Bulletin Information for Select Stations
 #'
-#' Fetch the BoM agricultural bulletin information and return it in a tidy data
+#' Fetch the BOM agricultural bulletin information and return it in a tidy data
 #' frame
 #'
 #' @param state Australian state or territory as full name or postal code.
@@ -23,7 +22,7 @@
 #'  }
 #'
 #' @return
-#' Tidy data frame of a Australia BoM agricultural bulletin information.  For
+#' Tidy data frame of a Australia BOM agricultural bulletin information.  For
 #' full details of fields and units returned see Appendix 3 in the
 #' \emph{bomrang} vignette, use \code{vignette("bomrang", package = "bomrang")}
 #' to view.
@@ -35,17 +34,17 @@
 #'
 #' @references
 #' Agricultural observations are retrieved from the Australian Bureau of
-#' Meteorology (BoM) Weather Data Services Agriculture Bulletins,
+#' Meteorology (BOM) Weather Data Services Agriculture Bulletins,
 #' \url{http://www.bom.gov.au/catalogue/observations/about-agricultural.shtml}
 #'
 #'and
 #'
-#' Australian Bureau of Meteorology (BoM) Weather Data Services Observation of
+#' Australian Bureau of Meteorology (BOM) Weather Data Services Observation of
 #' Rainfall,
 #' \url{http://www.bom.gov.au/climate/how/observations/rain-measure.shtml}
 #'
 #' Station location and other metadata are sourced from the Australian Bureau of
-#' Meteorology (BoM) webpage, Bureau of Meteorology Site Numbers:
+#' Meteorology (BOM) webpage, Bureau of Meteorology Site Numbers:
 #' \url{http://www.bom.gov.au/climate/cdo/about/site-num.shtml}
 #'
 #' @author Adam H Sparks, \email{adamhsparks@gmail.com}
@@ -131,7 +130,7 @@ get_ag_bulletin <- function(state = "AUS") {
                               stations_site_list,
                               by = c("site" = "site"))
 
-  tidy_df["time.zone"] <- as.character(tidy_df["time.zone"])
+  tidy_df$time.zone <- as.character(tidy_df$time.zone)
 
   names(tidy_df)[c(1:3, 21)] <-
     c("obs_time_local", "obs_time_utc", "time_zone", "full_name")

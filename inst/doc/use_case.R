@@ -33,9 +33,8 @@ head(subscribers_list)
 ## ----threshold, eval=FALSE-----------------------------------------------
 #  threshold_temp <- 40
 
-## ----forecast, eval=TRUE-------------------------------------------------
-QLD_forecast <- get_precis_forecast(state = "QLD")
-head(QLD_forecast)
+## ----forecast, eval=FALSE------------------------------------------------
+#  QLD_forecast <- get_precis_forecast(state = "QLD")
 
 ## ----for_loop, eval=FALSE------------------------------------------------
 #  QLD_hotdates <-

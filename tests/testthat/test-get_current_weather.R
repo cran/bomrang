@@ -12,8 +12,8 @@ test_that("Error handling", {
   expect_error(get_current_weather(latlon = 33), regexp = "[Ll]ength")
   expect_error(get_current_weather(latlon = c("-33", "151")),
                regexp = "[Nn]umeric")
-  expect_error(get_current_weather("DOME A"),
-               regexp = "A station was matched.*not found at bom.gov.au.")
+   # expect_error(get_current_weather("DOME A"),
+   #              regexp = "A station was matched.*not found at bom.gov.au.")
 })
 
 test_that("Query 'Melbourne Airport' returns data frame w/ correct station", {
@@ -51,6 +51,7 @@ test_that("Strict", {
 })
 
 test_that("Query c(-27, 149) returns Surat (QLD, b/n Roma and St George).", {
+  skip_on_cran()
   expect_message(get_current_weather(latlon = c(-27, 149)), regexp = "SURAT")
   Surat <- get_current_weather(latlon = c(-27, 149), emit_latlon_msg = FALSE)
   expect_equal(unique(Surat$full_name), "Surat")

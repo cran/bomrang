@@ -1,24 +1,20 @@
-## ----current_weather, eval=TRUE------------------------------------------
-library("bomrang")
+## ----libraries, echo=FALSE, message=FALSE--------------------------------
+library(bomrang)
 
-Melbourne_weather <- get_current_weather("Melbourne (Olympic Park)")
-head(Melbourne_weather)
+## ----current_weather, eval=FALSE-----------------------------------------
+#  Melbourne_weather <- get_current_weather("Melbourne (Olympic Park)")
 
-## ----precis_forecast, eval=TRUE------------------------------------------
-library("bomrang")
+## ----precis_forecast, eval=FALSE-----------------------------------------
+#  QLD_forecast <- get_precis_forecast(state = "QLD")
 
-QLD_forecast <- get_precis_forecast(state = "QLD")
-head(QLD_forecast)
+## ----ag_bulletin, eval=FALSE---------------------------------------------
+#  QLD_bulletin <- get_ag_bulletin(state = "QLD")
 
-## ----ag_bulletin, eval=TRUE----------------------------------------------
-library("bomrang")
+## ----weather-bulletin-AM, eval=FALSE-------------------------------------
+#  qld_weather <- get_weather_bulletin(state = "QLD", morning = TRUE)
 
-QLD_bulletin <- get_ag_bulletin(state = "QLD")
-head(QLD_bulletin)
-
-## ----weather_bulletin----------------------------------------------------
-qld_weather <- get_weather_bulletin(state = "QLD")
-head(qld_weather)
+## ----weather-bulletin-PM, eval=FALSE-------------------------------------
+#  qld_weather <- get_weather_bulletin(state = "QLD")
 
 ## ----sweep_stations, eval=TRUE-------------------------------------------
 # Show only the first ten stations in the list
@@ -72,7 +68,7 @@ if (requireNamespace("ggplot2", quietly = TRUE) &&
   
   Aust_map <- map_data("world", region = "Australia")
   
-  BoM_stations <- ggplot(Aust_stations, aes(x = lon, y = lat)) + 
+  BOM_stations <- ggplot(Aust_stations, aes(x = lon, y = lat)) + 
     geom_polygon(data = Aust_map, aes(x = long, y = lat, group = group), 
                  color = grey(0.7),
                  fill = NA) +
@@ -81,13 +77,13 @@ if (requireNamespace("ggplot2", quietly = TRUE) &&
     coord_map(ylim = c(-45, -5),
               xlim = c(96, 167)) +
     theme_map() + 
-    labs(title = "BoM Station Locations",
+    labs(title = "BOM Station Locations",
          subtitle = "Australia, outlying islands and buoys (excl. Antarctic stations)",
-         caption = "Data: Australia Bureau of Meteorology (BoM)\n
+         caption = "Data: Australia Bureau of Meteorology (BOM)\n
          and NaturalEarthdata, http://naturalearthdata.com")
   
   # Using the gridExtra and grid packages add a neatline to the map
-  grid.arrange(BoM_stations, ncol = 1)
+  grid.arrange(BOM_stations, ncol = 1)
   grid.rect(width = 0.98, 
             height = 0.98, 
             gp = grid::gpar(lwd = 0.25, 

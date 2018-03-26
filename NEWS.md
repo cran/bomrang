@@ -1,3 +1,50 @@
+# bomrang 0.1.4
+
+## Minor changes
+
+- Much faster station location checking using `ASDS.foyer::latlon2SA`
+
+- "BoM" is replaced with "BOM" throughout the package for consistency
+
+- `janitor` >= 1.0.0 is now required
+
+# bomrang 0.1.3
+
+## Minor changes
+
+- Much faster station location checking using `sf::st_join()`
+
+## Bug fixes
+
+- Correct issues with updating internal databases
+
+# bomrang 0.1.2
+
+## Minor changes
+
+- The internal `stations_site_list` now is checked against GADM 
+(Global Administrative Areas), http://www.gadm.org/ to ensure state listed is
+correct. This is in response to an error where Alice Springs Airport was
+reported in South Australia in the March 2018 update from BOM. There may be
+others. The original BOM values for state are in an `org_state` column.
+However, `bomrang` will use the corrected `state` column values.
+
+- Update code to be compliant with current and future versions of `janitor`
+
+- Vignettes no longer evaluate code on-the-fly that requires BOM servers to
+respond in response to CRAN rejecting `bomrang` for a failure of a vingette to
+build due to this issue
+
+## Bug fixes
+
+- Correct issue with converting the timzeone in ag bulletin to character where
+the conversion resulted in a vector of numerals, not the expected string of 
+characters, e.g. "EST"
+
+- Remove redundant functionality in `update_station_locations()` where data were
+fetched using `tryCatch()` and then again without
+
+--------------------------------------------------------------------------------
 
 # bomrang 0.1.1
 
@@ -59,7 +106,7 @@ internal database
 - Fix error in vignette that referred to `update_forecast_locations()`, it
 should instead refer to `update_forecast_towns()`
 
-- Update internal stations list with latest data from BoM
+- Update internal stations list with latest data from BOM
 
 ## Bug fixes
 
@@ -98,7 +145,7 @@ vignette, thanks @mpadge
 
 ## Major changes
 
-- Fetch BoM 0900 and 1500 weather bulletins from SHTML sources and create a
+- Fetch BOM 0900 and 1500 weather bulletins from SHTML sources and create a
 tidy data frame of the data
 
 --------------------------------------------------------------------------------
@@ -120,11 +167,11 @@ decimal places
 
 ## Major changes
 
-- Fetch BoM satellite images available through public FTP
+- Fetch BOM satellite images available through public FTP
 
 - New use-case vignette, using _bomrang_ for the _WINS_ project
 
-- Welcome message included with statement regarding BoM copyright
+- Welcome message included with statement regarding BOM copyright
 
 - Concatenate vignettes into a single file with appendices for descriptions of
 data returned by functions
@@ -132,7 +179,7 @@ data returned by functions
 - Product IDs are included in outputs from `get_*()` functions that return a
 tidy dataframe
 
-- Full station names are reported along with BoM's current name used to refer
+- Full station names are reported along with BOM's current name used to refer
 to a station location. In some cases a station "name" may be the same for both
 a current and retired station.
 
@@ -155,7 +202,7 @@ that document the data fields and units, rather than separate vingettes
 - ramifications of updating station lists are now stated clearly in the vignette
 and help files for applicable functions
 
-- a map of BoM stations is included in an appendix of the _bomrang_ vingette
+- a map of BOM stations is included in an appendix of the _bomrang_ vingette
 
 - Lat/Lon values are specified to be in decimal degrees in
 `get_current_weather()` help and vignette
@@ -176,7 +223,7 @@ the user
 - Spellchecking in all files
 
 - `agrep` is now used in all functions where the user enters state or Australia
- values to query BoM data
+ values to query BOM data
 
 - best practices for programming with `dplyr 0.7` using `rlang` are now
 employed, which reduces the need for the `# CRAN NOTE avoidance`
@@ -265,7 +312,7 @@ the `get_*()` functions
 ## Major changes
 
 - Include internal databases of station locations and metadata for
-`get_current_weather()` and `get_ag_bulletin()` both derived from the same BoM
+`get_current_weather()` and `get_ag_bulletin()` both derived from the same BOM
 station master list
 
 - The new database includes a more complete list of JSON URLs and ag bulletin
@@ -278,7 +325,7 @@ in a few seconds as desired using the new `update_station_locations()` function
 - Better tests written for the package  
 
 - Add a new file describing internal database creation for station locations,
-metadata and JSON URLs, create_BoM_station_list.md
+metadata and JSON URLs, create_BOM_station_list.md
 
 --------------------------------------------------------------------------------
 
@@ -297,7 +344,7 @@ metadata and JSON URLs, create_BoM_station_list.md
 - Hugh Parsonage has joined as a contributor  
 
 - Added a new function `get_current_weather()` to retrieve weather data from 
-specified BoM weather stations  
+specified BOM weather stations  
 
 - Added a new function `sweep_for_stations()` to find stations used in 
 `get_current_weather()` function, based on distance from a specified latitude 
@@ -339,4 +386,4 @@ meteorological values
 
 - Added a `NEWS.md` file to track changes to the package.
 
-- New package for fetching BoM forecasts and ag information bulletins
+- New package for fetching BOM forecasts and ag information bulletins

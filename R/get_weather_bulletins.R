@@ -1,6 +1,6 @@
-#' Get BoM 0900 or 1500 Weather Bulletin
+#' Get BOM 0900 or 1500 Weather Bulletin
 #'
-#' Fetch the daily BoM 0900 or 1500 weather bulletins and return a tidy data
+#' Fetch the daily BOM 0900 or 1500 weather bulletins and return a tidy data
 #' frame for a specified state or territory.
 #'
 #' @param state Australian state or territory as full name or postal code.
@@ -37,7 +37,7 @@
 #' qld_weather <- get_weather_bulletin (state = "QLD", morning = FALSE)
 #'}
 #' @references
-#' Daily observation data come from Australian Bureau of Meteorology (BoM)
+#' Daily observation data come from Australian Bureau of Meteorology (BOM)
 #' website. The 3pm bulletin for Queensland is, for example,
 #' \url{http://www.bom.gov.au/qld/observations/3pm_bulletin.shtml}
 #'
@@ -69,10 +69,9 @@ get_weather_bulletin <- function(state = "qld", morning = TRUE) {
   }
 
   dat <- lapply(dat, tidy_bulletin_header) %>%
-    dplyr::bind_rows()
-
-  # much easier than dplyr::rename, and names vary between 9am and 3pm bulletins
-  dat <- janitor::clean_names(dat)
+    dplyr::bind_rows() %>%
+    janitor::clean_names(case = "old_janitor") %>%
+    janitor::remove_empty("cols")
 
   if (the_state %notin% c("WA", "SA")) {
     names(dat)[grepl("rain", names(dat))] <- "rain_mm"
