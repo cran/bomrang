@@ -30,4 +30,4 @@ manage_cache <- NULL # nocov start
 
 stub <- function(){
   rgdal::readGDAL()
-}
+} # nocov end

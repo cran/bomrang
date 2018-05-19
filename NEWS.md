@@ -1,3 +1,19 @@
+# bomrang 0.2.0
+
+## New features
+
+- `get_historical()` retrieves historical daily rainfall, min/max temperatures,
+or solar exposure. (@jonocarroll)
+
+## Minor changes
+
+- `get_precis_forecast()` handles states/territories with no/missing
+precipitation data gracefully
+
+## Bug fixes
+
+- Add `rappdirs` to Imports section of DESCRIPTION file to fix missing import
+
 # bomrang 0.1.4
 
 ## Minor changes

@@ -16,6 +16,9 @@ library(bomrang)
 ## ----weather-bulletin-PM, eval=FALSE-------------------------------------
 #  qld_weather <- get_weather_bulletin(state = "QLD")
 
+## ----historical_mintemps, eval=FALSE-------------------------------------
+#  Canberra_mintemps <- get_historical(latlon = c(-35.2809, 149.1300), type = "min")
+
 ## ----sweep_stations, eval=TRUE-------------------------------------------
 # Show only the first ten stations in the list
 head(sweep_for_stations(latlon = c(-35.3, 149.2)), 10)
