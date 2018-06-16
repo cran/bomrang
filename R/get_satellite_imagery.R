@@ -49,7 +49,7 @@
 #' imagery <- get_available_imagery(product_id = "IDE00425")
 #' }
 #'
-#' @author Adam H Sparks, \email{adamhsparks@gmail.com}
+#' @author Adam H Sparks, \email{adamhsparks@@gmail.com}
 #'
 #' @export
 get_available_imagery <- function(product_id = "all") {
@@ -79,7 +79,7 @@ get_available_imagery <- function(product_id = "all") {
 #' Value is optional.
 #' @param cache Logical.  Store image files locally for later use?  If
 #' \code{FALSE}, the downloaded files are removed when R session is closed. To
-#' take advantage of cached files in future sessions, use \code{cache = TRUE}.
+#' take advantage of cached files in future sessions, use \var{cache = TRUE}.
 #' Defaults to \code{FALSE}.  Value is optional.
 #'
 #' @details Valid BOM satellite Product IDs include:
@@ -118,7 +118,7 @@ get_available_imagery <- function(product_id = "all") {
 #' timestamp and band.
 #'
 #' @references
-#' Australian Bureau of Meteorology (BOM) High-definition satellite images
+#' Australian Bureau of Meteorology (BOM) high-definition satellite images \cr
 #' \url{http://www.bom.gov.au/australia/satellite/index.shtml}
 #'
 #' @examples
@@ -136,7 +136,7 @@ get_available_imagery <- function(product_id = "all") {
 #'
 #' }
 
-#' @author Adam H Sparks, \email{adamhsparks@gmail.com}
+#' @author Adam H Sparks, \email{adamhsparks@@gmail.com}
 #' @export
 get_satellite_imagery <-
   function(product_id = NULL,
@@ -331,8 +331,7 @@ get_satellite_imagery <-
   # check if the Product ID requested provides any files on server -------------
   if (length(tif_files) == 0 |
       tif_files[1] == "ftp://ftp.bom.gov.au/anon/gen/gms/") {
-    stop(paste0("\nSorry, no files are currently available for ", product_id),
-         call. = FALSE)
+    stop(paste0("\nSorry, no files are currently available for ", product_id))
   }
   return(tif_files)
 }

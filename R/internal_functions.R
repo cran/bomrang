@@ -181,7 +181,7 @@ convert_state <- function(state) {
 #'
 #' @return URL of the historical observation resource
 #' @keywords internal
-#' @author Jonathan Carroll, \email{rpkg@jcarroll.com.au}
+#' @author Jonathan Carroll, \email{rpkg@@jcarroll.com.au}
 #' @noRd
 .get_zip_url <- function(site, code = 122) {
   url1 <-
@@ -214,15 +214,15 @@ convert_state <- function(state) {
 #'
 #' @return data loaded from the zip file
 #' @keywords internal
-#' @author Jonathan Carroll, \email{rpkg@jcarroll.com.au}
+#' @author Jonathan Carroll, \email{rpkg@@jcarroll.com.au}
 #' @noRd
-.get_zip_and_load <- function(zipurl) {
+.get_zip_and_load <- function(url) {
   tmp <- tempfile(fileext = ".zip")
-  utils::download.file(zipurl, tmp, mode = "wb")
+  utils::download.file(url, tmp)
   zipped <- utils::unzip(tmp, exdir = dirname(tmp))
   unlink(tmp)
   datfile <- grep("Data.csv", zipped, value = TRUE)
-  message("\nData saved as ", datfile, "\n")
+  message("Data saved as ", datfile)
   dat <- utils::read.csv(datfile, header = TRUE)
   dat
 }
@@ -233,7 +233,7 @@ convert_state <- function(state) {
 #'
 #' @return a data.frame of forecast areas and aac codes
 #' @keywords internal
-#' @author Adam H Sparks, \email{adamhsparks@gmail.com}
+#' @author Adam H Sparks, \email{adamhspark@@s@gmail.com}
 #' @noRd
 
 # get the data from areas --------------------------------------------------

@@ -9,8 +9,8 @@
 #' @param type Measurement type, either daily "rain", "min" (temp), "max"
 #'   (temp), or "solar" (exposure). Partial matching is performed.
 #'
-#' @return a complete [data.frame] of historical observations for the chosen
-#'   station, with some subset of the following columns
+#' @return A complete \code{\link[base]{data.frame}} of historical observations for
+#' the chosen station, with some subset of the following columns
 #'
 #'   \tabular{rl}{
 #'   **Product_code**:\tab BOM internal code.\cr
@@ -25,8 +25,8 @@
 #'   **Rainfall**:\tab Daily recorded rainfall in mm.\cr
 #'   **Period**:\tab Period over which rainfall was measured.\cr
 #'   **Solar_exposure**:\tab Daily global solar exposure in MJ/m^2.\cr
-#'   **Quality**:\tab Y, N, or missing. Data which have not yet completed the
-#'   routine quality control process are marked accordingly.
+#'   **Quality**:\tab Y, N, or missing. Data which have not yet completed the\cr
+#'               \tab routine quality control process are marked accordingly.
 #'   }
 #'
 #'   Temperature data prior to 1910 should be used with extreme caution as many
@@ -39,15 +39,15 @@
 #'   temperature in the 24 hours to prior to 9 am can occur around 9 am the
 #'   previous day if the night was particularly warm.
 #'
-#'   Either `stationid` or `latlon` must be provided, but if both are, then
-#'   `stationid` will be used as it is more reliable.
+#'   Either \var{stationid} or \var{latlon} must be provided, but if both are,
+#'   then \var{stationid} will be used as it is more reliable.
 #'
 #'   In some cases data is available back to the 1800s, so tens of thousands of
 #'   daily records will be returned. Other stations will be newer and will
 #'   return fewer observations.
 #'
 #' @export
-#' @author Jonathan Carroll, \email{rpkg@jcarroll.com.au}
+#' @author Jonathan Carroll, \email{rpkg@@jcarroll.com.au}
 #'
 #' @examples
 #' \dontrun{
@@ -84,10 +84,10 @@ get_historical <-
 
     ## ensure station is known
     # CRAN NOTE avoidance
-    JSONurl_site_list <- NULL # nocov start
+    JSONurl_site_list <- NULL # nocov
     load(system.file("extdata",
                      "JSONurl_site_list.rda",
-                     package = "bomrang")) # nocov end
+                     package = "bomrang"))
     if (!stationid %in% JSONurl_site_list$site)
       stop("Station not recognised.",
            call. = FALSE)

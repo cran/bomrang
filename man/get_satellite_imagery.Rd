@@ -19,7 +19,7 @@ Value is optional.}
 
 \item{cache}{Logical.  Store image files locally for later use?  If
 \code{FALSE}, the downloaded files are removed when R session is closed. To
-take advantage of cached files in future sessions, use \code{cache = TRUE}.
+take advantage of cached files in future sessions, use \var{cache = TRUE}.
 Defaults to \code{FALSE}.  Value is optional.}
 }
 \value{
@@ -76,7 +76,7 @@ imagery <- get_satellite_imagery(product_id = avail, scans = 2)
 }
 }
 \references{
-Australian Bureau of Meteorology (BOM) High-definition satellite images
+Australian Bureau of Meteorology (BOM) high-definition satellite images \cr
 \url{http://www.bom.gov.au/australia/satellite/index.shtml}
 }
 \seealso{

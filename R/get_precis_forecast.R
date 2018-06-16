@@ -24,10 +24,10 @@
 #'  }
 #'
 #' @return
-#' Tidy [data.frame] of a Australia BOM précis seven day forecasts for select
-#' towns.  For full details of fields and units returned see Appendix 2 in the
-#' \emph{bomrang} vignette, use \code{vignette("bomrang", package = "bomrang")}
-#' to view.
+#' Tidy  \code{\link[base]{data.frame}} of a Australia BOM précis seven day
+#' forecasts for select towns.  For full details of fields and units returned
+#' see Appendix 2 in the \pkg{bomrang} vignette, use \cr
+#' \code{vignette("bomrang", package = "bomrang")} to view.
 #'
 #' @examples
 #' \dontrun{
@@ -35,16 +35,17 @@
 #'}
 #' @references
 #' Forecast data come from Australian Bureau of Meteorology (BOM) Weather Data
-#' Services \url{http://www.bom.gov.au/catalogue/data-feeds.shtml}
+#' Services \cr
+#' \url{http://www.bom.gov.au/catalogue/data-feeds.shtml}
 #'
 #' Location data and other metadata for towns come from
-#' the BOM anonymous FTP server with spatial data
+#' the BOM anonymous FTP server with spatial data \cr
 #' \url{ftp://ftp.bom.gov.au/anon/home/adfd/spatial/}, specifically the DBF
-#' file portion of a shapefile,
+#' file portion of a shapefile, \cr
 #' \url{ftp://ftp.bom.gov.au/anon/home/adfd/spatial/IDM00013.dbf}
 #'
-#' @author Adam H Sparks, \email{adamhsparks@gmail.com} and Keith Pembleton,
-#' \email{keith.pembleton@usq.edu.au}
+#' @author Adam H Sparks, \email{adamhsparks@@gmail.com} and Keith Pembleton,
+#' \email{keith.pembleton@@usq.edu.au}
 #' @importFrom magrittr %>%
 #' @export
 get_precis_forecast <- function(state = "AUS") {
@@ -171,7 +172,8 @@ get_precis_forecast <- function(state = "AUS") {
                   "end_time_utc")], 2, function(x)
                     chartr("Z", " ", x))
 
-  if ("precipitation_range" %in% colnames(out)) {
+  if ("precipitation_range" %in% colnames(out))
+  {
     out[, "precipitation_range"] <-
       as.character(out[, "precipitation_range"])
     # format any values that are only zero to make next step easier
@@ -235,17 +237,31 @@ get_precis_forecast <- function(state = "AUS") {
                                1,
                                nchar(basename(xmlforecast_url)) - 4)
 
-  data.table::setnames(
-    tidy_df,
-    old = c(
-      "PT_NAME",
-      "type_air_temperature_maximum_units_celsius",
-      "type_air_temperature_minimum_units_celsius"
-    ),
-    new = c("town",
-            "minimum_temperature",
-            "maximum_temperature")
-  )
+  if (getRversion() < "3.5.0") {
+    data.table::setnames(
+      tidy_df,
+      old = c(
+        "PT_NAME",
+        "air_temperature_maximum_celsius",
+        "air_temperature_minimum_celsius"
+      ),
+      new = c("town",
+              "maximum_temperature",
+              "minimum_temperature")
+    )
+  } else {
+    data.table::setnames(
+      tidy_df,
+      old = c(
+        "PT_NAME",
+        "type_air_temperature_maximum_units_celsius",
+        "type_air_temperature_minimum_units_celsius"
+      ),
+      new = c("town",
+              "maximum_temperature",
+              "minimum_temperature")
+    )
+  }
 
   # reorder columns
   refcols <- c(
