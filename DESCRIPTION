@@ -1,7 +1,7 @@
 Package: bomrang
 Type: Package
-Title: Australian Government Bureau of Meteorology Data from R
-Version: 0.2.1
+Title: Australian Government Bureau of Meteorology (BOM) Data from R
+Version: 0.2.2
 Authors@R: c(person("Adam", "Sparks", role = c("aut", "cre"),
     email = "adamhsparks@gmail.com",
     comment = c(ORCID = "0000-0002-0061-8359")),
@@ -53,7 +53,7 @@ X-schema.org-keywords: bom, meteorological-data, weather-forecast,
         australia, weather, weather-data, meteorology,
         australia-bureau-of-meteorology
 X-schema.org-isPartOf: https://ropensci.org
-Packaged: 2018-06-16 05:35:18 UTC; adamsparks
+Packaged: 2018-07-19 07:36:24 UTC; adamsparks
 Author: Adam Sparks [aut, cre] (<https://orcid.org/0000-0002-0061-8359>),
   Jonathan Carroll [aut] (<https://orcid.org/0000-0002-1404-5264>),
   Mark Padgham [aut, rev] (<https://orcid.org/0000-0003-2172-5265>),
@@ -63,4 +63,4 @@ Author: Adam Sparks [aut, cre] (<https://orcid.org/0000-0002-0061-8359>),
   Brooke Anderson [rev] (<https://orcid.org/0000-0002-5012-9035>)
 Maintainer: Adam Sparks <adamhsparks@gmail.com>
 Repository: CRAN
-Date/Publication: 2018-06-16 05:46:26 UTC
+Date/Publication: 2018-07-19 08:50:07 UTC
