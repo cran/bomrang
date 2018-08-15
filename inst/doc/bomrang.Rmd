@@ -32,13 +32,13 @@ tidy data frames; `get_precis_forecast()`, which retrieves the précis (short)
 forecast; `get_current_weather()`, which fetches the current weather from a
 given station; `get_ag_bulletin()`, which retrieves the agriculture
 bulletin; `get_weather_bulletin()` which fetches the 0900 and 1500 weather
-bulletins; and `get_historical()` which fetches historical daily temperature min/max, 
-rainfall, or solar exposure data. A second family of functions retrieve 
-information pertaining to
-satellite imagery, `get_available_imagery()` and the imagery itself,
-`get_satellite_imagery()`. The last group functions provides internal
-functionality for _bomrang_ itself; `update_forecast_towns()`, which updates
-an internal database of forecast locations distributed with the package, 
+bulletins; `get_coastal_forecast()` which fetches coastal waters forecasts for
+each state and `get_historical()` which fetches historical daily temperature
+min/max, rainfall, or solar exposure data. A second family of functions retrieve 
+information pertaining to satellite imagery, `get_available_imagery()` and the
+imagery itself, `get_satellite_imagery()`. The last group functions provides
+internal functionality for _bomrang_ itself; `update_forecast_towns()`, which
+updates an internal database of forecast locations distributed with the package, 
 `sweep_for_stations()` which returns the nearest weather stations to a point in
 Australia and, `manage_cache()` that provides facilities for managing
 cached satellite imagery.
@@ -173,12 +173,12 @@ codes.
 
 -   **WA** - Western Australia
 
-#### Results
+### Results
 
 The function `get_weather_bulletin()` will return a tidy data frame of BOM data
 for the requested state(s) or territory.
 
-#### Example
+### Example
 
 Following is an example fetching the 9AM bulletin for Queensland.
 
@@ -192,12 +192,54 @@ Following is an example fetching the 3PM bulletin for Queensland.
 qld_weather <- get_weather_bulletin(state = "QLD")
 ```
 
+
+## Using `get_coastal_forecast`
+
+This function only takes one argument, `state`. The `state` parameter allows the
+user to select the forecast for just one state or a national forecast. States or
+territories are specified using the official postal codes or full name with
+fuzzy matching performed via `agrep()`
+
+- **ACT** - Australian Capital Territory
+
+- **NSW** - New South Wales
+
+- **NT** - Northern Territory
+
+- **QLD** - Queensland
+
+- **SA** - South Australia
+
+- **TAS** - Tasmania
+
+- **VIC** - Victoria
+
+- **WA** - Western Australia
+
+- **AUS** - Australia, returns national forecast including all states, NT and
+ACT.
+
+### Results
+
+The function, `get_coastal_forecast()`, will return a data frame of the coastal
+waters forecast for marine zones in each state. See Appendix 6 for a full
+description of the fields and values.
+
+### Example
+
+Following is an example fetching the forecast for Queensland.
+
+```{r coastal_forecast, eval=FALSE}
+QLD_coastal_forecast <- get_coastal_forecast(state = "QLD")
+```
+
+
 ## Using `get_historical`
 
 `get_historical()` takes either of two arguments: `stationid` and `latlon`, as 
-well as a type of observation (`"rain"`, `"min"` (temperature), `"max"` (temperature), 
-or `"solar"`), returning the historical daily weather observations of that type for the 
-given location.
+well as a type of observation (`"rain"`, `"min"` (temperature), `"max"`
+(temperature), or `"solar"`), returning the historical daily weather
+observations of that type for the given location.
 
 If `latlon` is used, the observations returned are from the station nearest to
 that latitude-longitude coordinate. `latlon` values are entered as decimal
@@ -207,18 +249,18 @@ tell the user which station was used.
 ### Results
 
 The table returned may have different fields depending on the station that is
-selected. The time period over which observations are available will be highly dependent 
-on the station requested. Some stations may only have a decade or less of data 
-(e.g. max temperature at `070351 (CANBERRA AIRPORT)` has ~3,700+ observations back to 2008) 
-while others may have very extensive records (e.g. rainfall at 
-`ADELAIDE (WEST TERRACE / NGAYIRDAPIRA)` has ~65,000+ observations back to 1839, three years
-after the city was founded.) 
+selected. The time period over which observations are available will be highly
+dependent on the station requested. Some stations may only have a decade or less
+of data (e.g. max temperature at `070351 (CANBERRA AIRPORT)` has ~3,700+
+observations back to 2008) while others may have very extensive records (e.g.
+rainfall at `ADELAIDE (WEST TERRACE / NGAYIRDAPIRA)` has ~65,000+ observations
+back to 1839, three years after the city was founded.) 
 
 
 ### Example
 
-Following is an example fetching the historical daily temperature minimum observations 
-for the station closest to 35.2809°S, 149.1300°E (Canberra)
+Following is an example fetching the historical daily temperature minimum
+observations for the station closest to 35.2809°S, 149.1300°E (Canberra).
 
 ```{r historical_mintemps, eval=FALSE}
 Canberra_mintemps <- get_historical(latlon = c(-35.2809, 149.1300), type = "min")
@@ -348,7 +390,7 @@ Valid BOM satellite Product IDs for GeoTIFF files include:
 `get_available_imagery()` only takes one argument, `product_id`, a BOM identifier
 for the imagery that you wish to check for available imagery. Using this
 function will fetch a listing of BOM GeoTIFF satellite imagery from
-[ftp://ftp.bom.gov.au/anon/gen/gms/](ftp://ftp.bom.gov.au/anon/gen/gms/) to
+[ftp://ftp2.bom.gov.au/anon/gen/gms/](ftp://ftp2.bom.gov.au/anon/gen/gms/) to
 display which files are currently available for download. These files are
 available at ten minute update frequency with a 24 hour delete time. 
 This function can be used see the most recent files available and then specify
@@ -423,7 +465,8 @@ the cached files:
 
 - Delete all files in cache, `manage_cache$delete_all()`
 
-To access the files directly, outside of R, the following command will give you the location of the directory:
+To access the files directly, outside of R, the following command will give you
+the location of the directory:
 
 `manage_cache$cache_path_get()`
 
@@ -1033,3 +1076,31 @@ if (requireNamespace("ggplot2", quietly = TRUE) &&
                             fill = NA))
 }
 ```
+
+
+## Appendix 6 - Output from `get_coastal_forecast`  
+
+The output of `get_coastal_forecast` will return a data frame with coastal waters forecast values of each area within the given state with the following fields:  
+
+<table>
+<tr><th>Field Name</th><th>Description</th></tr>
+<tr><td>index</td><td>Forecast index number.  0 = current day </td></tr>
+<tr><td>product_id</td><td>BOM Product ID from which the data are derived</td></tr>
+<tr><td>type</td><td>Forecast Region type e.g. Coastal</td></tr>
+<tr><td>state_code</td><td>State name (postal code abbreviation)</td></tr>
+<tr><td>dist_name</td><td>Name of forecast district</td></tr>
+<tr><td>pt_1_name</td><td>Start of forecast district</td></tr>
+<tr><td>pt_2_name</td><td>End of forecast district</td></tr>
+<tr><td>aac</td><td>AMOC Area Code, _e.g._, WA_MW008, a unique identifier for each location</td></tr>
+<tr><td>start_time_local</td><td>Start of forecast date and time in local TZ</td></tr>
+<tr><td>end_time_local</td><td>End of forecast date and time in local TZ</td></tr>
+<tr><td>UTC_offset</td><td>Hours offset from difference in hours and minutes from Coordinated Universal Time (UTC) for `start_time_local` and `end_time_local`</td></tr>
+<tr><td>start_time_utc</td><td>Start of forecast date and time in UTC</td></tr>
+<tr><td>end_time_utc</td><td>End of forecast date and time in UTC</td></tr>
+<tr><td>forecast_seas</td><td>Forecast sea conditions</td></tr>
+<tr><td>forecast_weather</td><td>Forecast weather summary</td></tr>
+<tr><td>forecast_winds</td><td>Forecast winds summary</td></tr>
+<tr><td>forecast_swell1</td><td>Forecast primary swell summary</td></tr>
+<tr><td>forecast_swell2</td><td>Forecast seondary swell summary (not always provided)</td></tr>
+<tr><td>marine_forecast</td><td>Additional marine forecast warning information (not always provided)</td></tr>
+</table><br>

@@ -16,6 +16,9 @@ library(bomrang)
 ## ----weather-bulletin-PM, eval=FALSE-------------------------------------
 #  qld_weather <- get_weather_bulletin(state = "QLD")
 
+## ----coastal_forecast, eval=FALSE----------------------------------------
+#  QLD_coastal_forecast <- get_coastal_forecast(state = "QLD")
+
 ## ----historical_mintemps, eval=FALSE-------------------------------------
 #  Canberra_mintemps <- get_historical(latlon = c(-35.2809, 149.1300), type = "min")
 

@@ -1,13 +1,11 @@
-
-
-#' Get BOM Daily Précis Forecast for Select Towns
+#' Get BOM Coastal Waters Forecast
 #'
-#' Fetch the BOM daily précis forecast and return a tidy data frame of the seven
-#' day town forecast for a specified state or territory.
+#' Fetch the BOM daily Coastal Waters Forecast and return a tidy data frame of
+#' the forecast regions for a specified state or region.
 #'
 #' @param state Australian state or territory as full name or postal code.
 #' Fuzzy string matching via \code{\link[base]{agrep}} is done.  Defaults to
-#' "AUS" returning all state bulletins, see details for further information.
+#' "AUS" returning all state forecasts, see details for further information.
 #'
 #' @details Allowed state and territory postal codes, only one state per request
 #' or all using \code{AUS}.
@@ -24,31 +22,28 @@
 #'  }
 #'
 #' @return
-#' Tidy \code{\link[base]{data.frame}} of a Australia BOM précis seven day
-#' forecasts for select towns.  For full details of fields and units returned
-#' see Appendix 2 in the \pkg{bomrang} vignette, use \cr
-#' \code{vignette("bomrang", package = "bomrang")} to view.
+#' Tidy \code{\link[base]{data.frame}} of a Australia BOM Coastal Waters
+#' Forecast.
 #'
 #' @examples
 #' \dontrun{
-#' BOM_forecast <- get_precis_forecast(state = "QLD")
+#' coastal_forecast <- get_coastal_forecast(state = "NSW")
 #'}
 #' @references
 #' Forecast data come from Australian Bureau of Meteorology (BOM) Weather Data
 #' Services \cr
 #' \url{http://www.bom.gov.au/catalogue/data-feeds.shtml}
 #'
-#' Location data and other metadata for towns come from
+#' Location data and other metadata come from
 #' the BOM anonymous FTP server with spatial data \cr
 #' \url{ftp://ftp2.bom.gov.au/anon/home/adfd/spatial/}, specifically the DBF
 #' file portion of a shapefile, \cr
-#' \url{ftp://ftp2.bom.gov.au/anon/home/adfd/spatial/IDM00013.dbf}
+#' \url{ftp://ftp2.bom.gov.au/anon/home/adfd/spatial/IDM00003.dbf}
 #'
-#' @author Adam H Sparks, \email{adamhsparks@@gmail.com} and Keith Pembleton,
-#' \email{keith.pembleton@@usq.edu.au}
+#' @author Dean Marchiori, \email{deanmarchiori@@gmail.com}
 #' @importFrom magrittr %>%
 #' @export
-get_precis_forecast <- function(state = "AUS") {
+get_coastal_forecast <- function(state = "AUS") {
   the_state <- .check_states(state) # see internal_functions.R
 
   # ftp server
@@ -56,19 +51,13 @@ get_precis_forecast <- function(state = "AUS") {
 
   # create vector of XML files
   AUS_XML <- c(
-    "IDN11060.xml",
-    # NSW
-    "IDD10207.xml",
-    # NT
-    "IDQ11295.xml",
-    # QLD
-    "IDS10044.xml",
-    # SA
-    "IDT16710.xml",
-    # TAS
-    "IDV10753.xml",
-    # VIC
-    "IDW14199.xml"  # WA
+    "IDN11001.xml", # NSW
+    "IDD11030.xml", # NT
+    "IDQ11290.xml", # QLD
+    "IDS11072.xml", # SA
+    "IDT12329.xml", # TAS
+    "IDV10200.xml", # VIC
+    "IDW11160.xml"  # WA
   )
 
   if (the_state != "AUS") {
@@ -91,21 +80,21 @@ get_precis_forecast <- function(state = "AUS") {
         the_state == "WA" |
           the_state == "WESTERN AUSTRALIA" ~ paste0(ftp_base, AUS_XML[7])
       )
-    out <- .parse_forecast(xmlforecast_url)
+    out <- .parse_coastal_forecast(xmlforecast_url)
   } else {
     file_list <- paste0(ftp_base, AUS_XML)
-    out <- lapply(X = file_list, FUN = .parse_forecast)
-    out <- as.data.frame(data.table::rbindlist(out))
+    out <- lapply(X = file_list, FUN = .parse_coastal_forecast)
+    out <- as.data.frame(data.table::rbindlist(out, fill = TRUE))
   }
   return(out)
 }
 
-.parse_forecast <- function(xmlforecast_url) {
+.parse_coastal_forecast <- function(xmlforecast_url) {
   # CRAN note avoidance
-  AAC_codes <- attrs <- end_time_local <- precipitation_range <- # nocov start
-    start_time_local <- values <- NULL # nocov end
+  AAC_codes <- marine_AAC_codes <- attrs <- end_time_local <- # nocov start
+    precipitation_range <- start_time_local <- values <- NULL # nocov end
 
-  # download the XML forecast --------------------------------------------------
+  # download the XML forecast
   tryCatch({
     xmlforecast <- xml2::read_xml(xmlforecast_url)
   },
@@ -115,44 +104,28 @@ get_precis_forecast <- function(state = "AUS") {
       "Please retry again later.\n"
     ))
 
-  areas <-
-    xml2::xml_find_all(xmlforecast, ".//*[@type='location']")
-  xml2::xml_find_all(areas, ".//*[@type='forecast_icon_code']") %>%
-    xml2::xml_remove()
-
+  areas <- xml2::xml_find_all(xmlforecast, ".//*[@type='coast']")
   out <- lapply(X = areas, FUN = .parse_areas)
   out <- as.data.frame(do.call("rbind", out))
 
-  # This is the actual returned value for the main function. The functions
-  # below chunk the xml into locations and then days, this assembles into
-  # the final data frame
-
   out <- tidyr::spread(out, key = attrs, value = values)
 
-  # tidy up names
-  names(out) <- gsub("c\\(", "", names(out))
-  names(out) <- gsub("\\)", "", names(out))
-
   out <- out %>%
-    janitor::clean_names() %>%
+    janitor::clean_names(., case = "snake") %>%
     janitor::remove_empty("cols")
 
-  out <-
-    out %>%
-    tidyr::separate(end_time_local,
-                    into = c("end_time_local", "UTC_offset"),
-                    sep = "\\+") %>%
+  out <- out %>%
+    tidyr::separate(
+      end_time_local,
+      into = c("end_time_local", "UTC_offset"),
+      sep = "\\+") %>%
     tidyr::separate(
       start_time_local,
       into = c("start_time_local", "UTC_offset_drop"),
-      sep = "\\+"
-    )
-
+      sep = "\\+")
+  
   # drop the "UTC_offset_drop" column
   out <- out[!names(out) %in% "UTC_offset_drop"]
-
-  out$probability_of_precipitation <-
-    gsub("%", "", paste(out$probability_of_precipitation))
 
   # remove the "T" from the date/time columns
   out[, c("start_time_local",
@@ -172,38 +145,6 @@ get_precis_forecast <- function(state = "AUS") {
                   "end_time_utc")], 2, function(x)
                     chartr("Z", " ", x))
 
-  if ("precipitation_range" %in% colnames(out))
-  {
-    out[, "precipitation_range"] <-
-      as.character(out[, "precipitation_range"])
-    # format any values that are only zero to make next step easier
-    out$precipitation_range[which(out$precipitation_range == "0 mm")] <-
-      "0 mm to 0 mm"
-
-    # separate the precipitation column into two, upper/lower limit ------------
-    out <-
-      out %>%
-      tidyr::separate(
-        precipitation_range,
-        into = c(
-          "lower_precipitation_limit",
-          "upper_precipitation_limit"
-        ),
-        sep = "to",
-        fill = "left"
-      )
-  } else {
-    # if the columns don't exist insert as NA
-    out$lower_precipitation_limit <- NA
-    out$upper_precipitation_limit <- NA
-    out <- out[, c(1:9, 13, 12, 10, 11)]
-  }
-
-  # remove unnecessary text (mm in prcp cols) ----------------------------------
-  out <- as.data.frame(lapply(out, function(x) {
-    gsub(" mm", "", x)
-  }))
-
   # convert factors to character for left merge, otherwise funny stuff happens
   out[, seq_len(ncol(out))] <-
     lapply(out[, seq_len(ncol(out))], as.character)
@@ -215,80 +156,48 @@ get_precis_forecast <- function(state = "AUS") {
                                             format = "%Y-%m-%d %H:%M:%OS"))
 
   # convert numeric values to numeric
-  out[, c(8:11, 13)] <- lapply(out[, 8:11, 13], as.numeric)
+  out[, 2] <- as.numeric(out[,2])
 
   # Load AAC code/town name list to join with final output
-  load(system.file("extdata", "AAC_codes.rda", package = "bomrang"))  # nocov
+  load(system.file("extdata", "marine_AAC_codes.rda", package = "bomrang")) # nocov
 
   # return final forecast object -----------------------------------------------
+  
   # merge with aac codes for location information
   tidy_df <-
     dplyr::left_join(out,
-                     AAC_codes, by = c("aac" = "AAC"))
-
-  # set names to match précis forecast
-  names(tidy_df)[15:17] <- c("lon", "lat", "elev")
-
-  # add state field
-  tidy_df$state <- gsub("_.*", "", tidy_df$aac)
+                     marine_AAC_codes, by = c("aac" = "AAC")) %>% 
+    janitor::clean_names(., case = "snake")
 
   # add product ID field
   tidy_df$product_id <- substr(basename(xmlforecast_url),
                                1,
                                nchar(basename(xmlforecast_url)) - 4)
 
-  if (getRversion() < "3.5.0") {
-    data.table::setnames(
-      tidy_df,
-      old = c(
-        "PT_NAME",
-        "air_temperature_maximum_celsius",
-        "air_temperature_minimum_celsius"
-      ),
-      new = c("town",
-              "maximum_temperature",
-              "minimum_temperature")
-    )
-  } else {
-    data.table::setnames(
-      tidy_df,
-      old = c(
-        "PT_NAME",
-        "type_air_temperature_maximum_units_celsius",
-        "type_air_temperature_minimum_units_celsius"
-      ),
-      new = c("town",
-              "maximum_temperature",
-              "minimum_temperature")
-    )
-  }
-
   # reorder columns
   refcols <- c(
     "index",
     "product_id",
-    "state",
-    "town",
+    "type",
+    "state_code",
+    "dist_name",
+    "pt_1_name",
+    "pt_2_name",
     "aac",
-    "lat",
-    "lon",
-    "elev",
     "start_time_local",
     "end_time_local",
-    "UTC_offset",
+    "utc_offset",
     "start_time_utc",
     "end_time_utc",
-    "minimum_temperature",
-    "maximum_temperature",
-    "lower_precipitation_limit",
-    "upper_precipitation_limit",
-    "precis",
-    "probability_of_precipitation"
+    "forecast_seas",
+    "forecast_weather",
+    "forecast_winds",
+    "forecast_swell1"
   )
+  
+  # create factors
+  tidy_df$index <- as.factor(tidy_df$index)
+  
   tidy_df <- tidy_df[c(refcols, setdiff(names(tidy_df), refcols))]
-
-  # set factors
-  tidy_df[, c(1, 11)] <- lapply(tidy_df[, c(1, 11)], as.factor)
-
   return(tidy_df)
 }
