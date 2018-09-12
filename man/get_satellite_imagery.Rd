@@ -4,7 +4,7 @@
 \alias{get_satellite_imagery}
 \title{Get BOM Satellite GeoTIFF Imagery}
 \usage{
-get_satellite_imagery(product_id = NULL, scans = 1, cache = FALSE)
+get_satellite_imagery(product_id, scans = 1, cache = FALSE)
 }
 \arguments{
 \item{product_id}{Character.  BOM product ID to download in GeoTIFF format
@@ -28,7 +28,7 @@ timestamp and band.
 }
 \description{
 Fetch BOM satellite GeoTIFF imagery from
-\url{ftp://ftp2.bom.gov.au/anon/gen/gms/} and return a raster
+\url{ftp://ftp.bom.gov.au/anon/gen/gms/} and return a raster
 \code{\link[raster]{stack}} object of GeoTIFF files. Files are available at
 ten minute update frequency with a 24 hour delete time. Suggested to check
 file availability first by using \code{\link{get_available_imagery}}.

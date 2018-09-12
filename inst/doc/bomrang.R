@@ -20,7 +20,13 @@ library(bomrang)
 #  QLD_coastal_forecast <- get_coastal_forecast(state = "QLD")
 
 ## ----historical_mintemps, eval=FALSE-------------------------------------
-#  Canberra_mintemps <- get_historical(latlon = c(-35.2809, 149.1300), type = "min")
+#  Canberra_mintemps <- get_historical(latlon = c(-35.2809, 149.1300),
+#                                      type = "min")
+
+## ----historical_meta, eval=FALSE-----------------------------------------
+#  Canberra_mintemps <- get_historical(latlon = c(-35.2809, 149.1300),
+#                                      type = "min",
+#                                      meta = TRUE)
 
 ## ----sweep_stations, eval=TRUE-------------------------------------------
 # Show only the first ten stations in the list
@@ -51,6 +57,27 @@ head(sweep_for_stations(latlon = c(-35.3, 149.2)), 10)
 #  # load the raster library to work with the GeoTIFF files
 #  library(raster)
 #  plot(i)
+
+## ---- get_available_radar------------------------------------------------
+x <- get_available_radar()
+head(x)  
+
+## ----fig.height=9, fig.width=8-------------------------------------------
+x <- get_radar_imagery(product_id = "IDR032")
+
+# create a blank raster plot and add the radar layer
+r <-
+  raster::raster(
+  ncol = 564,
+  nrow = 524,
+  xmn = 0,
+  xmx = 524,
+  ymn = 0,
+  ymx = 564
+  )
+  raster::values(r) <- NA
+  raster::plot(r)
+  raster::plot(x, add = TRUE)
 
 ## ----station-locations-map, fig.width = 7, fig.height = 5, message = FALSE----
 if (requireNamespace("ggplot2", quietly = TRUE) &&
@@ -96,4 +123,78 @@ if (requireNamespace("ggplot2", quietly = TRUE) &&
                             col = "black",
                             fill = NA))
 }
+
+## ----historical_data, message=FALSE--------------------------------------
+library(magrittr)
+
+ncc <- bomrang:::.get_ncc()
+
+ncc <- 
+  ncc %>%
+  dplyr::mutate(ncc_obs_code = replace(ncc_obs_code,
+                                       ncc_obs_code == 136,
+                                       "rain")) %>% 
+  dplyr::mutate(ncc_obs_code = replace(ncc_obs_code,
+                                       ncc_obs_code == 123,
+                                       "tmin")) %>%
+  dplyr::mutate(ncc_obs_code = replace(ncc_obs_code,
+                                       ncc_obs_code == 122,
+                                       "tmax")) %>% 
+  dplyr::mutate(ncc_obs_code = replace(ncc_obs_code,
+                                       ncc_obs_code == 193,
+                                       "solar"))
+
+## ----completeness_map, , fig.width = 7, fig.height = 5, message = FALSE----
+perc_complete <- ggplot(ncc, aes(x = lon, y = lat)) + 
+  geom_polygon(data = Aust_map, aes(x = long, y = lat, group = group), 
+               color = grey(0.7),
+               fill = NA) +
+  geom_point(aes(color = percent),
+             alpha = 0.5,
+             size = 0.05) +
+  scale_colour_viridis_c(direction = -1,
+                         option = "A") +
+  coord_map(ylim = c(-45, -5),
+            xlim = c(96, 167)) +
+  theme_map() +
+  facet_wrap(. ~ ncc_obs_code) +
+  labs(title = "BOM Historical Station Data Completeness",
+       subtitle = "Australia, outlying islands and buoys (excl. Antarctic stations)",
+       caption = "Data: Australia Bureau of Meteorology (BOM)\n
+     and NaturalEarthdata, http://naturalearthdata.com")
+
+# Using the gridExtra and grid packages add a neatline to the map
+grid.arrange(perc_complete, ncol = 1)
+grid.rect(width = 0.98, 
+          height = 0.98, 
+          gp = grid::gpar(lwd = 0.25, 
+                          col = "black",
+                          fill = NA))
+
+## ----years_available, fig.width = 7, fig.height = 5, message = FALSE-----
+years_available <- ggplot(ncc, aes(x = lon, y = lat)) + 
+  geom_polygon(data = Aust_map, aes(x = long, y = lat, group = group), 
+               color = grey(0.7),
+               fill = NA) +
+  geom_point(aes(color = years),
+             alpha = 0.5,
+             size = 0.05) +
+  scale_colour_viridis_c(direction = -1,
+                         option = "A") +
+  coord_map(ylim = c(-45, -5),
+            xlim = c(96, 167)) +
+  theme_map() +
+  facet_wrap(. ~ ncc_obs_code) +
+  labs(title = "BOM Historical Station Data Years Available",
+       subtitle = "Australia, outlying islands and buoys (excl. Antarctic stations)",
+       caption = "Data: Australia Bureau of Meteorology (BOM)\n
+     and NaturalEarthdata, http://naturalearthdata.com")
+
+# Using the gridExtra and grid packages add a neatline to the map
+grid.arrange(years_available, ncol = 1)
+grid.rect(width = 0.98, 
+          height = 0.98, 
+          gp = grid::gpar(lwd = 0.25, 
+                          col = "black",
+                          fill = NA))
 

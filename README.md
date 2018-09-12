@@ -10,9 +10,9 @@ _bomrang_: Australian Government Bureau of Meteorology (BOM) Data from R <img al
 Provides functions to interface with Australian Government Bureau of Meteorology
 (BOM) data, fetching data and returning a tidy data frame of précis forecasts,
 current weather data from stations, ag information bulletins, historical weather
-data or a `raster::stack()` object of satellite imagery from GeoTIFF files.
+data and downloading and importing radar or satellite imagery.
 
-Credit for the name, *bomrang*, goes to [Di Cook](http://dicook.github.io), who
+Credit for the name, *bomrang*, goes to [Di Cook](https://dicook.github.io), who
 suggested it while attending the rOpenSci AUUnconf in Brisbane, 2016, upon
 seeing the
 [vignette](https://github.com/saundersk1/auunconf16/blob/master/Vignette_BOM.pdf)
@@ -45,7 +45,7 @@ Several functions are provided by *bomrang* to retrieve Australian Bureau of
 Meteorology (BOM) data. A family of functions retrieve weather data and return
 tidy data frames;
   - `get_precis_forecast()`, which retrieves the précis (short) forecast;
-  - `get_current_weather()`, which fetches the current weather from a given
+  - `get_current_weather()`, which fetches the current weather for a given
   station;
   - `get_ag_bulletin()`, which retrieves the agriculture bulletin;
   - `get_weather_bulletin()`, which retrieves the BOM 0900 or 1500 bulletins;
@@ -54,34 +54,46 @@ tidy data frames;
 station.
 
 A second group of functions retrieve information pertaining to satellite
-imagery,
-  - `get_available_imagery()` and the imagery itself,
-  - `get_satellite_imagery()`. Vignettes are provided illustrating examples of
-  all functions and a use case.
+and radar imagery,
+  - `get_available_imagery()`;
+  -  the satellite imagery itself, `get_satellite_imagery()`;
+  - `get_available_radar()`; and 
+  - the radar imagery itself, `get_radar_imagery()`.
+  
+[Vignettes are provided illustrating examples](https://ropensci.github.io/bomrang/articles/bomrang.html)
+of all functions and a [use case](https://ropensci.github.io/bomrang/articles/use_case.html).
 
 Meta
 ----
 
--   Please [report any issues or bugs](https://github.com/ropensci/bomrang/issues).
+-   Please
+  [report any issues or bugs](https://github.com/ropensci/bomrang/issues).
 
 -   License:
-    -   All code is licenced MIT
+    - All code is licenced MIT
 
-    -   All data is copyright Australia Bureau of Meteorology, BOM Copyright Notice <http://reg.bom.gov.au/other/copyright.shtml>
+    - All data is copyright Australia Bureau of Meteorology, BOM Copyright
+    Notice <br /><http://reg.bom.gov.au/other/copyright.shtml>
 
--   To cite *bomrang*, please use the output from `citation("bomrang")`
+- To cite *bomrang*, please use the output from `citation("bomrang")`
 
--   Please note that this project is released with a
-[Contributor Code of Conduct](CONDUCT.md). By participating in this project you
-agree to abide by its terms.
+- Please note that the *bomrang* project is released with a
+[Contributor Code of Conduct](CONDUCT.md). By participating in the *bomrang*
+project you agree to abide by its terms.
 
 References
 ----------
 
 [Australian Bureau of Meteorology (BOM) Weather Data Services](http://www.bom.gov.au/catalogue/data-feeds.shtml)
 
+[Australian Bureau of Meteorology (BOM) FTP Public 
+Products](http://www.bom.gov.au/catalogue/anon-ftp.shtml)
+
 [Australian Bureau of Meteorology (BOM) Weather Data Services Agriculture Bulletins](http://www.bom.gov.au/catalogue/observations/about-agricultural.shtml)
 
 [Australian Bureau of Meteorology (BOM) Weather Data Services Observation of Rainfall](http://www.bom.gov.au/climate/how/observations/rain-measure.shtml)
+
+[Australian Bureau of Meteorology (BOM) High-definition satellite images](http://www.bom.gov.au/australia/satellite/index.shtml)
+
 
 [![](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
