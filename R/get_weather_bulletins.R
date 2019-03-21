@@ -1,7 +1,8 @@
+
 #' Get BOM 0900 or 1500 Weather Bulletin
 #'
-#' Fetch the daily BOM 0900 or 1500 weather bulletins and return a tidy data
-#' frame for a specified state or territory.
+#' Fetch the daily \acronym{BOM} 0900 or 1500 weather bulletins and return a
+#' tidy data frame for a specified state or territory.
 #'
 #' @param state Australian state or territory as full name or postal code.
 #' Fuzzy string matching via \code{\link[base]{agrep}} is done.
@@ -34,8 +35,9 @@
 #' to view.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' qld_weather <- get_weather_bulletin (state = "QLD", morning = FALSE)
+#' qld_weather
 #'}
 #' @references
 #' Daily observation data come from Australian Bureau of Meteorology (BOM)
@@ -43,9 +45,10 @@
 #' \url{http://www.bom.gov.au/qld/observations/3pm_bulletin.shtml}
 #'
 #' @author Mark Padgham, \email{mark.padgham@@email.com}
-#' @export
+#' @export get_weather_bulletin
+
 get_weather_bulletin <- function(state = "qld", morning = TRUE) {
-  the_state <- convert_state(state) # see internal_functions.R
+  the_state <- .convert_state(state) # see internal_functions.R
   if (the_state == "AUS") {
     stop("Weather bulletins can only be extracted for individual states.")
   }
@@ -124,11 +127,11 @@ get_weather_bulletin <- function(state = "qld", morning = TRUE) {
     dplyr::mutate_at(.funs = as.numeric,
                      .vars = vars)
 
-  names(out) <- sub ("current_details_", "", names(out))
-  names(out) <- sub ("x24_hour_details_", "", names(out))
-  names(out) <- sub ("x6_hour_details_", "", names(out))
+  names(out) <- sub("current_details_", "", names(out))
+  names(out) <- sub("x24_hour_details_", "", names(out))
+  names(out) <- sub("x6_hour_details_", "", names(out))
 
-  return(out)
+  return(data.table::setDT(out))
 }
 
 #' tidy_bulletin_header

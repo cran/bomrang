@@ -1,4 +1,4 @@
-_bomrang_: Australian Government Bureau of Meteorology (BOM) Data from R <img align="right" src="man/figures/logo.png">
+_bomrang_: Australian Government Bureau of Meteorology (BOM) Data Client <img align="right" src="man/figures/logo.png">
 ================
 
 [![CircleCI](https://circleci.com/gh/ropensci/bomrang.svg?style=shield)](https://circleci.com/gh/ropensci/bomrang) [![Appveyor](https://ci.appveyor.com/api/projects/status/au6p6qy1ah2lrtl5/branch/master?svg=true)](https://ci.appveyor.com/project/adamhsparks/bomrang/branch/master) [![codecov](https://codecov.io/gh/ropensci/bomrang/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/bomrang) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.598301.svg)](https://doi.org/10.5281/zenodo.598301)
@@ -12,10 +12,10 @@ Provides functions to interface with Australian Government Bureau of Meteorology
 current weather data from stations, ag information bulletins, historical weather
 data and downloading and importing radar or satellite imagery.
 
-Credit for the name, *bomrang*, goes to [Di Cook](https://dicook.github.io), who
+Credit for the name, *bomrang*, goes to [Di Cook](http://dicook.org/), who
 suggested it while attending the rOpenSci AUUnconf in Brisbane, 2016, upon
 seeing the
-[vignette](https://github.com/saundersk1/auunconf16/blob/master/Vignette_BOM.pdf)
+[vignette](https://github.com/katerobsau/auunconf16/blob/master/Vignette_BoM.pdf)
 that we had assembled during the Unconf.
 
 Quick Start
@@ -70,7 +70,7 @@ Meta
   [report any issues or bugs](https://github.com/ropensci/bomrang/issues).
 
 -   License:
-    - All code is licenced MIT
+    - All code is licensed MIT
 
     - All data is copyright Australia Bureau of Meteorology, BOM Copyright
     Notice <br /><http://reg.bom.gov.au/other/copyright.shtml>

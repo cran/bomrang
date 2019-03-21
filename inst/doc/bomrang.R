@@ -79,6 +79,17 @@ r <-
   raster::plot(r)
   raster::plot(x, add = TRUE)
 
+## ------------------------------------------------------------------------
+adlmax <- get_historical(stationid = "023000", type = "max")
+adlmax
+
+filter(adlmax, month == 10)
+
+## ------------------------------------------------------------------------
+adlmax %>% 
+  select(station_number, year:day, max_temperature) %>% 
+  filter(month == 10)
+
 ## ----station-locations-map, fig.width = 7, fig.height = 5, message = FALSE----
 if (requireNamespace("ggplot2", quietly = TRUE) &&
     requireNamespace("ggthemes", quietly = TRUE) &&

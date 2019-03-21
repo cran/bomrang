@@ -4,19 +4,28 @@
 \name{bomrang}
 \alias{bomrang}
 \alias{bomrang-package}
-\title{Australian Government Bureau of Meteorology (BOM) Data from R}
+\title{Australian Government Bureau of Meteorology (\acronym{BOM}) Data Client}
 \description{
-Australian Government Bureau of Meteorology (BOM) Data from R
+\if{html}{\figure{logo.png}{options: align='right'}}
+
+Provides functions to interface with Australian Government Bureau
+    of Meteorology ('BOM') data, fetching data and returning a tidy data frame
+    of précis forecasts, historical and current weather data from stations,
+    agriculture bulletin data, 'BOM' 0900 or 1500 weather bulletins and
+    downloading and importing radar and satellite imagery files.  Data (c)
+    Australian Government Bureau of Meteorology Creative Commons (CC)
+    Attribution 3.0 licence or Public Access Licence (PAL) as appropriate.  See
+    <http://www.bom.gov.au/other/copyright.shtml> for further details.
 }
 \seealso{
 \strong{Useful links:}
 \itemize{
 \item{Development repository: \url{https://github.com/ropensci/bomrang}}
 \item{Static documentation: \url{https://ropensci.github.io/bomrang/}}
-\item{Report bugs at \url{https://github.com/ropensci/bomrang/issues}}
+\item{Report bugs: \url{https://github.com/ropensci/bomrang/issues}}
 }
 }
 \author{
-Adam H Sparks and Jonathan Carroll and  Mark Padgham and Hugh
-Parsonage and Keith Pembleton
+Adam H Sparks and Jonathan Carroll and Dean Marchiori and Mark
+Padgham and Hugh Parsonage and Keith Pembleton
 }
