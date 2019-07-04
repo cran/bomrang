@@ -32,6 +32,10 @@ library(bomrang)
 # Show only the first ten stations in the list
 head(sweep_for_stations(latlon = c(-35.3, 149.2)), 10)
 
+## ----sweep_forecast, eval=TRUE-------------------------------------------
+# Show only the first ten towns in the list
+head(sweep_for_forecast_towns(latlon = c(-35.3, 149.2)), 10)
+
 ## ---- eval = FALSE-------------------------------------------------------
 #  paste0(.libPaths(), "/bomrang/extdata")[1]
 

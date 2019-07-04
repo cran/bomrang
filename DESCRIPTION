@@ -1,13 +1,16 @@
 Package: bomrang
 Type: Package
 Title: Australian Government Bureau of Meteorology ('BOM') Data Client
-Version: 0.5.0
+Version: 0.6.0
 Authors@R: c(person("Adam", "Sparks", role = c("aut", "cre"),
     email = "adamhsparks@gmail.com",
     comment = c(ORCID = "0000-0002-0061-8359")),
     person("Jonathan", "Carroll", 
     email = "rpkg@jcarroll.com.au", role = "aut", 
     comment = c(ORCID = "0000-0002-1404-5264")),
+    person("James", "Goldie",
+    email = "me@rensa.co", role = "aut",
+    comment = c(ORCID = "0000-0002-5024-6207")),
     person("Dean", "Marchiori",
     email = "deanmarchiori@gmail.com", role = "aut"),
     person("Mark", "Padgham", role = c("aut", "rev"),
@@ -34,7 +37,7 @@ Description: Provides functions to interface with Australian Government Bureau
     Attribution 3.0 licence or Public Access Licence (PAL) as appropriate.  See
     <http://www.bom.gov.au/other/copyright.shtml> for further details.
 URL: https://github.com/ropensci/bomrang,
-        https://ropensci.github.io/bomrang/
+        https://docs.ropensci.org/bomrang/
 BugReports: https://github.com/ropensci/bomrang/issues
 License: MIT + file LICENSE
 Depends: R (>= 3.2.0)
@@ -46,8 +49,8 @@ Imports: curl (>= 2.8.1), crayon, data.table (>= 1.10.4), dplyr (>=
 Encoding: UTF-8
 LazyData: true
 Suggests: ASGS.foyer, covr, testthat, knitr, rmarkdown, ggplot2,
-        ggthemes, grid, gridExtra, pkgdown, maps, mapproj, rappdirs,
-        roxygen2 (>= 6.1.0)
+        ggthemes, grid, gridExtra, maps, mapproj, rappdirs, roxygen2
+        (>= 6.1.0)
 RoxygenNote: 6.1.1
 NeedsCompilation: no
 ByteCompile: TRUE
@@ -57,9 +60,10 @@ X-schema.org-keywords: bom, meteorological-data, weather-forecast,
         australia, weather, weather-data, meteorology,
         australia-bureau-of-meteorology
 X-schema.org-isPartOf: https://ropensci.org
-Packaged: 2019-03-21 11:41:06 UTC; adamsparks
+Packaged: 2019-07-04 21:03:31 UTC; adamsparks
 Author: Adam Sparks [aut, cre] (<https://orcid.org/0000-0002-0061-8359>),
   Jonathan Carroll [aut] (<https://orcid.org/0000-0002-1404-5264>),
+  James Goldie [aut] (<https://orcid.org/0000-0002-5024-6207>),
   Dean Marchiori [aut],
   Mark Padgham [aut, rev] (<https://orcid.org/0000-0003-2172-5265>),
   Hugh Parsonage [aut] (<https://orcid.org/0000-0003-4055-0835>),
@@ -68,4 +72,4 @@ Author: Adam Sparks [aut, cre] (<https://orcid.org/0000-0002-0061-8359>),
   Brooke Anderson [rev] (<https://orcid.org/0000-0002-5012-9035>)
 Maintainer: Adam Sparks <adamhsparks@gmail.com>
 Repository: CRAN
-Date/Publication: 2019-03-21 12:13:23 UTC
+Date/Publication: 2019-07-04 21:30:04 UTC
