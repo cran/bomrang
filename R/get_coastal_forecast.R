@@ -1,5 +1,4 @@
 
-
 #' Get BOM Coastal Waters Forecast
 #'
 #' Fetch the \acronym{BOM} daily Coastal Waters Forecast and return a tidy data
@@ -96,7 +95,7 @@ get_coastal_forecast <- function(state = "AUS") {
     out <- lapply(X = file_list, FUN = .parse_coastal_forecast)
     out <- data.table::rbindlist(out, fill = TRUE)
   }
-  return(out)
+  return(out[])
 }
 
 .parse_coastal_forecast <- function(xml_url) {

@@ -1,3 +1,25 @@
+# bomrang 0.6.1
+
+## Bug fixes
+
+* resolves the `group_by` issues of
+[#105](https://github.com/ropensci/bomrang/issues/105) reported by
+[Blundys](https://github.com/Blundys)
+
+* Adds `skip_on_cran()` to some tests causing failures in CRAN checks that
+should not have been tested on CRAN
+
+* Fixes bug in functions returning [data.table] objects that don't print to
+console
+
+* Fixes bugs that removed station locations from internal lists being
+distributed with bomrang and when user updated them on their own machine
+
+## Minor changes
+
+* Prebuild main vignette with examples depending on Internet connection, which
+allows for example output to be displayed for more functions
+
 # bomrang 0.6.0
 
 ## Bug fixes

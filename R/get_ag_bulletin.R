@@ -102,9 +102,9 @@ get_ag_bulletin <- function(state = "AUS") {
     out <-
       lapply(X = file_list,
              FUN = .parse_bulletin)
-    out <- as.data.frame(data.table::rbindlist(out))
+    out <- data.table::rbindlist(out)
   }
-  return(out)
+  return(out[])
 }
 
 #' @noRd

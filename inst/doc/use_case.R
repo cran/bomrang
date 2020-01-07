@@ -1,14 +1,14 @@
 ## ----load_libraries_hidden, eval=TRUE, echo=FALSE, message=FALSE, results='hide'----
 library(bomrang)
 
-## ----install_packages, eval=FALSE----------------------------------------
+## ----install_packages, eval=FALSE---------------------------------------------
 #  install.packages("bomrang")
 #  install.packages("mailR")
 #  library(dplyr)  # filter()
 #  library(bomrang)
 #  library(mailR)
 
-## ----suscribers, eval=TRUE-----------------------------------------------
+## ----suscribers, eval=TRUE----------------------------------------------------
 subscribers_list <-
   data.frame(cbind(
     c(1, 2, 3),
@@ -26,17 +26,17 @@ colnames(subscribers_list) <-
   c("Entry","Name","Surname","Location","email")
 head(subscribers_list)
 
-## ----our_email, eval=FALSE-----------------------------------------------
+## ----our_email, eval=FALSE----------------------------------------------------
 #  our_email <- "yyyy***xxxx@gmail.com"
 #  our_password <- "*password*"
 
-## ----threshold, eval=FALSE-----------------------------------------------
+## ----threshold, eval=FALSE----------------------------------------------------
 #  threshold_temp <- 40
 
-## ----forecast, eval=FALSE------------------------------------------------
+## ----forecast, eval=FALSE-----------------------------------------------------
 #  QLD_forecast <- get_precis_forecast(state = "QLD")
 
-## ----for_loop, eval=FALSE------------------------------------------------
+## ----for_loop, eval=FALSE-----------------------------------------------------
 #  QLD_hotdates <-
 #    QLD_forecast %>%
 #    filter(maximum_temperature >= threshold_temp)
