@@ -8,14 +8,14 @@
 #' Note this may be different to \code{full_name} in the response. See
 #' \strong{Details}.
 #' @param latlon A length-2 numeric vector giving the decimal degree
-#' latitude and longitude (in that order), \emph{e.g.} \code{latlon =
+#' latitude and longitude (in that order), \emph{e.g.}, \code{latlon =
 #' c(-34, 151)} for Sydney. When given instead of \code{station_name}, the
 #' nearest station (in this package) is used, with a message indicating the
 #' nearest such station. (See also \code{\link{sweep_for_stations}}.) Ignored if
 #' used in combination with \var{station_name}, with a warning.
 #' @param emit_latlon_msg Logical. If \code{TRUE} (the default), and
 #' \code{latlon} is selected, a message is emitted before the table is returned
-#' indicating which station was actually used (\emph{i.e.} which station was
+#' indicating which station was actually used (\emph{i.e.}, which station was
 #' found to be nearest to the given coordinate).
 #'
 #' @details
@@ -32,7 +32,7 @@
 #' \code{vignette("bomrang", package = "bomrang")}\cr
 #' for a complete list of fields and units.
 #'
-#' @return A \code{bomrang_tbl} object (extension of a 
+#' @return A \code{bomrang_tbl} object (extension of a
 #' \code{\link[base]{data.frame}})  of requested BOM station's current and prior
 #'  72hr data. For full details of fields and units returned, see Appendix 1
 #'  in the \pkg{bomrang} vignette, use \cr
@@ -51,11 +51,11 @@
 #' @references
 #' Weather data observations are retrieved from:
 #' Australian Bureau of Meteorology (\acronym{BOM}) Weather Data Services,
-#' Observations - individual stations: 
+#' Observations - individual stations:
 #' \url{http://www.bom.gov.au/catalogue/data-feeds.shtml}
 #'
 #' Station location and other metadata are sourced from the Australian Bureau of
-#' Meteorology (\acronym{BOM}) webpage, Bureau of Meteorology Site Numbers: 
+#' Meteorology (\acronym{BOM}) webpage, Bureau of Meteorology Site Numbers:
 #' \url{http://www.bom.gov.au/climate/cdo/about/site-num.shtml}
 #'
 #' @author Hugh Parsonage, \email{hugh.parsonage@@gmail.com}
@@ -67,7 +67,7 @@
 #' @rdname get_current_weather
 #' @export get_current_weather
 
-get_current_weather <- 
+get_current_weather <-
   function(station_name,
            strict = FALSE,
            latlon = NULL,
@@ -226,26 +226,15 @@ get_current_weather <-
       
     }
     
-    tryCatch({
-      observations.json <-
-        jsonlite::fromJSON(txt = json_url)
-    },
-    error = function(e) {
-      e$message <-
-        paste(
-          "\nA station was matched. ",
-          "However, a corresponding JSON file was not found at",
-          "bom.gov.au.\n"
-        )
-      # Otherwise refers to open.connection
-      e$call <- NULL
-      stop(e)
-    })
+    observations.json <- .get_url(remote_file = json_url)
+    if (is.null(observations.json)) {
+      return(invisible(NULL))
+    }
     
     if ("observations" %notin% names(observations.json) ||
         "data" %notin% names(observations.json$observations)) {
       stop(
-        "\nA station was matched ",
+        "\nA station was matched. ",
         "However, the JSON returned by bom.gov.au was not in expected form.\n"
       )
     }

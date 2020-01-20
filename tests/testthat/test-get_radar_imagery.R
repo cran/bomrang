@@ -1,7 +1,5 @@
-
-context("Radar imagery")
-
-# get_available_radar 
+# get_available_radar()---------------------------------------------------------
+context("Available radar imagery")
 
 test_that("get_available_radar error handling works", {
   skip_on_cran()
@@ -27,8 +25,8 @@ test_that("get_available_radar functions properly", {
   expect_equal(unique(xxx$Radar_id) , 3)
 })
 
-
-# get_radar_imagery
+# get_radar_imagery()-----------------------------------------------------------
+context("Fetching radar imagery")
 
 test_that("Error handling works", {
   skip_on_cran()
@@ -37,14 +35,11 @@ test_that("Error handling works", {
   expect_error(get_radar_imagery(c("IDR032", "IDR022")))
 })
 
-
 test_that("get_radar_imagery functions properly", {
   skip_on_cran()
-  
   y <- get_radar_imagery(product_id = "IDR022")
   expect_is(y, "RasterLayer")
   
   yy <- get_radar_imagery(product_id = "IDR022", download_only = TRUE)
   expect_null(yy)
-  
 })

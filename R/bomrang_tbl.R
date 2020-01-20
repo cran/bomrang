@@ -19,7 +19,7 @@ print.bomrang_tbl <- function(x, ...) {
   vars     <- attr(x, "vars") %||% "UNKNOWN"
   indices  <- attr(x, "indices") %||% "UNKNOWN"
   
-  .stylecat("  ---- Australian Bureau of Meteorology (BOM) Data Resource ----\n")
+  .stylecat("  --- Australian Bureau of Meteorology (BOM) Data Resource ---\n")
   .stylecat("  (Original Request Parameters)\n")
   .stylecat("  Station:\t\t", location, " [", station, "] \n")
   .stylecat("  Location:\t\t", "lat: ", lat, ", lon: ", lon, "\n")
@@ -34,7 +34,7 @@ print.bomrang_tbl <- function(x, ...) {
             units,
             "]",
             "\n")
-  ## dplyr groupings
+  # dplyr groupings
   if (!is.null(attr(x, "vars"))) {
     .stylecat("  Groups:\t\t", vars, paste0(" [", length(indices), "]\n"))
   }
@@ -48,9 +48,5 @@ print.bomrang_tbl <- function(x, ...) {
 }
 
 .stylecat <- function(...) {
-  cat(crayon::cyan(
-    # crayon::italic(
-    paste0(...))
-    # )
-    )
+  cat(crayon::cyan(crayon::italic(paste0(...))))
 }

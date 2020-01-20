@@ -1,11 +1,13 @@
 
-#' Obtain Historical BOM Data
+#' Obtain historical BOM data
 #'
 #' Retrieves daily observations for a given station.
 #'
 #' @md
 #' @param stationid \acronym{BOM} station 'ID'. See Details.
 #' @param latlon Length-2 numeric vector of Latitude/Longitude. See Details.
+#' @param radius Numeric value, distance (km) from \var{latlon}, must be
+#'   numeric.
 #' @param type Measurement type, either daily "rain", "min" (temp), "max"
 #'   (temp), or "solar" (exposure). Partial matching is performed. If not
 #'   specified returns the first matching type in the order listed.
@@ -21,8 +23,10 @@
 #'   **Day**:\tab Day of observation (1-31).\cr
 #'   **Min_temperature**:\tab Minimum daily recorded temperature (degrees C).\cr
 #'   **Max_temperature**:\tab Maximum daily recorded temperature (degrees C).\cr
-#'   **Accum_days_min**:\tab Accumulated number of days of minimum temperature.\cr
-#'   **Accum_days_max**:\tab Accumulated number of days of maximum temperature.\cr
+#'   **Accum_days_min**:\tab Accumulated number of days of minimum
+#'    temperature.\cr
+#'   **Accum_days_max**:\tab Accumulated number of days of maximum 
+#'   temperature.\cr
 #'   **Rainfall**:\tab Daily recorded rainfall in mm.\cr
 #'   **Period**:\tab Period over which rainfall was measured.\cr
 #'   **Solar_exposure**:\tab Daily global solar exposure in MJ/m^2.\cr
@@ -48,7 +52,7 @@
 #'
 #' @section Caution:
 #'   Temperature data prior to 1910 should be used with extreme caution as many
-#'   stations, prior to that date, were exposed in non-standard shelters, some
+#'   stations prior to that date were exposed in non-standard shelters. Some
 #'   of which give readings which are several degrees warmer or cooler than
 #'   those measured according to post-1910 standards.
 #'
@@ -60,18 +64,18 @@
 #'   Either \var{stationid} or \var{latlon} must be provided, but if both are,
 #'   then \var{stationid} will be used as it is more reliable.
 #'
-#'   In some cases data is available back to the 1800s, so tens of thousands of
+#'   In some cases data is available back to the 1800s, so tens-of-thousands of
 #'   daily records will be returned. Other stations will be newer and will
 #'   return fewer observations.
 #'
-#' @section \code{dplyr} Compatibility: The \code{bomrang_tbl} class is
+#' @section \pkg{dplyr} Compatibility: The \code{bomrang_tbl} class is
 #'   compatible with \code{\link[dplyr:dplyr-package]{dplyr}} as long as the
 #'   \code{bomrang} package is on the search path. Common functions
 #'   (\code{\link[dplyr]{filter}}, \code{\link[dplyr]{select}},
 #'   \code{\link[dplyr]{arrange}}, \code{\link[dplyr]{mutate}},
 #'   \code{\link[dplyr:select]{rename}}, \code{\link[dplyr]{arrange}},
 #'   \code{\link[dplyr]{slice}}, \code{\link[dplyr]{group_by}}) are provided
-#'   which mask the dplyr versions (but use those internally, maintaining
+#'   which mask the \pkg{dplyr} versions (but use those internally, maintaining
 #'   attributes).
 #'
 #' @author Jonathan Carroll, \email{rpkg@@jcarroll.com.au}
@@ -85,12 +89,13 @@
 #' @rdname get_historical
 #' @export get_historical
 
-get_historical <- get_historical_weather <- 
+get_historical <- get_historical_weather <-
   function(stationid = NULL,
            latlon = NULL,
+           radius = NULL,
            type = c("rain", "min", "max", "solar")) {
     site <- ncc_obs_code <- NULL #nocov
-    
+
     if (is.null(stationid) & is.null(latlon))
       stop("stationid or latlon must be provided.",
            call. = FALSE)
@@ -111,17 +116,17 @@ get_historical <- get_historical_weather <-
               ")")
       stationid <- stationdetails$site
     }
-    
+
     ## ensure station is known
     ncc_list <- .get_ncc()
-    
+
     if (suppressWarnings(all(
       is.na(as.numeric(stationid)) |
       as.numeric(stationid) %notin% ncc_list$site
     )))
       stop("\nStation not recognised.\n",
            call. = FALSE)
-    
+
     type <- match.arg(type)
     obscode <- switch(
       type,
@@ -130,11 +135,11 @@ get_historical <- get_historical_weather <-
       max = 122,
       solar = 193
     )
-    
+
     ncc_list <-
       dplyr::filter(ncc_list, c(site == as.numeric(stationid) &
                                   ncc_obs_code == obscode))
-    
+
     if (obscode %notin% ncc_list$ncc_obs_code)
       stop(call. = FALSE,
            "\n`type` ",
@@ -142,10 +147,10 @@ get_historical <- get_historical_weather <-
            " is not available for `stationid` ",
            stationid,
            "\n")
-    
+
     zipurl <- .get_zip_url(stationid, obscode)
     dat <- .get_zip_and_load(zipurl)
-    
+
     names(dat) <- c("product_code",
                     "station_number",
                     "year",
@@ -164,7 +169,7 @@ get_historical <- get_historical_weather <-
                                "quality"),
                       solar = c("solar_exposure")
                     ))
-    
+
     return(
       structure(
         dat,
@@ -202,25 +207,25 @@ get_historical <- get_historical_weather <-
     start_year <-
     end_month <- end_year <- years <- percent <- AWS <-
     start <- end <- ncc_obs_code <- site <- NULL #nocov end
-  
+
   base_url <- "http://www.bom.gov.au/climate/data/lists_by_element/"
-  
+
   rain <- paste0(base_url, "alphaAUS_136.txt")
   tmax <- paste0(base_url, "alphaAUS_122.txt")
   tmin <- paste0(base_url, "alphaAUS_123.txt")
   solar <- paste0(base_url, "alphaAUS_193.txt")
-  
+
   weather <- c(rain, tmax, tmin, solar)
   names(weather) <- c("rain", "tmax", "tmin", "solar")
-  
+
   ncc_codes <- vector(mode = "list", length = length(weather))
   names(ncc_codes) <- names(weather)
-  
+
   for (i in seq_along(weather)) {
     ncc_obs_code <- substr(weather[i],
                            nchar(weather[i]) - 6,
                            nchar(weather[i]) - 4)
-    
+
     ncc <-
       readr::read_table(
         weather[i],
@@ -253,11 +258,11 @@ get_historical <- get_historical_weather <-
         ),
         na = ""
       )
-    
+
     # trim the end of the rows off that have extra info that's not in columns
     nrows <- nrow(ncc) - 7
-    ncc <- ncc[1:nrows,]
-    
+    ncc <- ncc[1:nrows, ]
+
     # unite month and year, convert to a date and add ncc_obs_code
     ncc <-
       ncc %>%
@@ -266,7 +271,7 @@ get_historical <- get_historical_weather <-
       dplyr::mutate(start = lubridate::dmy(paste0("01-", start))) %>%
       dplyr::mutate(end = lubridate::dmy(paste0("01-", end))) %>%
       dplyr::mutate(ncc_obs_code = ncc_obs_code)
-    
+
     ncc_codes[[i]] <- ncc
   }
   dplyr::bind_rows(ncc_codes)
@@ -290,9 +295,12 @@ get_historical <- get_historical_weather <-
 #' @noRd
 
 .get_zip_url <- function(site, code = 122) {
+  
+  base_url <- "http://www.bom.gov.au/jsp/ncc/cdio/weatherData/"
   url1 <-
     paste0(
-      "http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_stn_num=",
+      base_url,
+      "av?p_stn_num=",
       site,
       "&p_display_type=availableYears&p_nccObsCode=",
       code
@@ -303,7 +311,8 @@ get_historical <- get_historical_weather <-
   pc <- sub("^.*:", "", raw)
   url2 <-
     paste0(
-      "http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=",
+      base_url,
+      "av?p_display_type=dailyZippedDataFile&p_stn_num=",
       site,
       "&p_c=",
       pc,
@@ -313,7 +322,7 @@ get_historical <- get_historical_weather <-
   url2
 }
 
-#' Download a BOM Data .zip File and Load into Session
+#' Download a BOM Data .zip file and load into session
 #'
 #' @param url URL of zip file to be downloaded/extracted/loaded.
 #'

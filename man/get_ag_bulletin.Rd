@@ -2,29 +2,30 @@
 % Please edit documentation in R/get_ag_bulletin.R
 \name{get_ag_bulletin}
 \alias{get_ag_bulletin}
-\title{Get BOM Agriculture Bulletin Information for Select Stations}
+\title{Get BOM agriculture bulletin information for select stations}
 \usage{
 get_ag_bulletin(state = "AUS")
 }
 \arguments{
 \item{state}{Australian state or territory as full name or postal code.
 Fuzzy string matching via \code{\link[base]{agrep}} is done.  Defaults to
-"AUS" returning all state bulletins, see details for more.}
+"AUS" returning all state bulletins, see Details for more.}
 }
 \value{
-Tidy \code{\link[data.table]{data.table}} of Australia \acronym{BOM} 
- agricultural bulletin information.  For full details of fields and units
- returned see Appendix 3 in the \pkg{bomrang} vignette, use \cr
+A data frame as a \code{\link[data.table]{data.table}} object of Australia
+ \acronym{BOM} agricultural bulletin information.  For full details of fields
+ and units returned see Appendix 3 in the \pkg{bomrang} vignette, use \cr
  \code{vignette("bomrang", package = "bomrang")} to view.
 }
 \description{
 Fetch the \acronym{BOM} agricultural bulletin information and return it in a
-tidy data frame
+data frame
 }
 \details{
 Allowed state and territory postal codes, only one state per request
 or all using \code{AUS}.
  \describe{
+   \item{ACT}{Australian Capital Territory (will return NSW)}
    \item{NSW}{New South Wales}
    \item{NT}{Northern Territory}
    \item{QLD}{Queensland}
@@ -32,7 +33,7 @@ or all using \code{AUS}.
    \item{TAS}{Tasmania}
    \item{VIC}{Victoria}
    \item{WA}{Western Australia}
-   \item{AUS}{Australia, returns bulletin for all states and NT}
+   \item{AUS}{Australia, returns forecast for all states, NT and ACT}
  }
 }
 \examples{
@@ -44,19 +45,23 @@ ag_bulletin
 }
 \references{
 Agricultural observations are retrieved from the Australian Bureau of
-Meteorology (BOM) Weather Data Services Agriculture Bulletins, \cr
+Meteorology (\acronym{BOM}) Weather Data Services Agriculture Bulletins, \cr
 \url{http://www.bom.gov.au/catalogue/observations/about-agricultural.shtml}
 
 and
 
-Australian Bureau of Meteorology (BOM) Weather Data Services Observation of
-Rainfall, \cr
+Australian Bureau of Meteorology (\acronym{BOM})) Weather Data Services
+Observation of Rainfall, \cr
 \url{http://www.bom.gov.au/climate/how/observations/rain-measure.shtml}
 
 Station location and other metadata are sourced from the Australian Bureau of
 Meteorology (\acronym{BOM}) webpage, Bureau of Meteorology Site Numbers: \cr
 \url{http://www.bom.gov.au/climate/cdo/about/site-num.shtml}
 }
+\seealso{
+parse_ag_bulletin
+}
 \author{
-Adam H Sparks, \email{adamhsparks@gmail.com}
+Adam H. Sparks, \email{adamhsparks@gmail.com} and Paul Melloy
+\email{paul@melloy.com.au}
 }
