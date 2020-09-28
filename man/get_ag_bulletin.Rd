@@ -9,13 +9,13 @@ get_ag_bulletin(state = "AUS")
 \arguments{
 \item{state}{Australian state or territory as full name or postal code.
 Fuzzy string matching via \code{\link[base]{agrep}} is done.  Defaults to
-"AUS" returning all state bulletins, see Details for more.}
+\dQuote{AUS} returning all state bulletins, see Details for more.}
 }
 \value{
 A data frame as a \code{\link[data.table]{data.table}} object of Australia
- \acronym{BOM} agricultural bulletin information.  For full details of fields
- and units returned see Appendix 3 in the \pkg{bomrang} vignette, use \cr
- \code{vignette("bomrang", package = "bomrang")} to view.
+\acronym{BOM} agricultural bulletin information.  For full details of fields
+and units returned see Appendix 3 in the \CRANpkg{bomrang} vignette, use \cr
+\code{vignette("bomrang", package = "bomrang")} to view.
 }
 \description{
 Fetch the \acronym{BOM} agricultural bulletin information and return it in a
@@ -24,17 +24,17 @@ data frame
 \details{
 Allowed state and territory postal codes, only one state per request
 or all using \code{AUS}.
- \describe{
-   \item{ACT}{Australian Capital Territory (will return NSW)}
-   \item{NSW}{New South Wales}
-   \item{NT}{Northern Territory}
-   \item{QLD}{Queensland}
-   \item{SA}{South Australia}
-   \item{TAS}{Tasmania}
-   \item{VIC}{Victoria}
-   \item{WA}{Western Australia}
-   \item{AUS}{Australia, returns forecast for all states, NT and ACT}
- }
+\describe{
+\item{ACT}{Australian Capital Territory (will return NSW)}
+\item{NSW}{New South Wales}
+\item{NT}{Northern Territory}
+\item{QLD}{Queensland}
+\item{SA}{South Australia}
+\item{TAS}{Tasmania}
+\item{VIC}{Victoria}
+\item{WA}{Western Australia}
+\item{AUS}{Australia, returns forecast for all states, NT and ACT}
+}
 }
 \examples{
 \donttest{
@@ -59,7 +59,7 @@ Meteorology (\acronym{BOM}) webpage, Bureau of Meteorology Site Numbers: \cr
 \url{http://www.bom.gov.au/climate/cdo/about/site-num.shtml}
 }
 \seealso{
-parse_ag_bulletin
+\link{parse_ag_bulletin}
 }
 \author{
 Adam H. Sparks, \email{adamhsparks@gmail.com} and Paul Melloy

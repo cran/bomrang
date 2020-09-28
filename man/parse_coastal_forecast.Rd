@@ -17,33 +17,33 @@ forecast file(s) to parse. See Details for more.}
 \value{
 A \code{\link[data.table]{data.table}} of an Australia \acronym{BOM}
 Coastal Waters Forecast. For full details of fields and units
-returned see Appendix 5 in the \pkg{bomrang} vignette, use \cr
+returned see Appendix 5 in the \CRANpkg{bomrang} vignette, use \cr
 \code{vignette("bomrang", package = "bomrang")} to view.
 }
 \description{
 Parse local \acronym{BOM} daily coastal waters forecast \acronym{XML} file(s)
- and return a data frame for a specified state or territory or all Australia.
+and return a data frame for a specified state or territory or all Australia.
 }
 \details{
 Allowed state and territory postal codes, only one state per request
 or all using \code{AUS}.
- \describe{
-   \item{ACT}{Australian Capital Territory (will return NSW)}
-   \item{NSW}{New South Wales}
-   \item{NT}{Northern Territory}
-   \item{QLD}{Queensland}
-   \item{SA}{South Australia}
-   \item{TAS}{Tasmania}
-   \item{VIC}{Victoria}
-   \item{WA}{Western Australia}
-   \item{AUS}{Australia, returns forecast for all states, NT and ACT}
- }
+\describe{
+\item{ACT}{Australian Capital Territory (will return NSW)}
+\item{NSW}{New South Wales}
+\item{NT}{Northern Territory}
+\item{QLD}{Queensland}
+\item{SA}{South Australia}
+\item{TAS}{Tasmania}
+\item{VIC}{Victoria}
+\item{WA}{Western Australia}
+\item{AUS}{Australia, returns forecast for all states, NT and ACT}
+}
 
 The \var{filepath} argument will only accept a directory where files
 are located for parsing. DO NOT supply the full path including the file name.
 This function will only parse the requested state or all of Australia in the
-same fashion as `get_coastal_forecast()`, provided that the files are all
-present in the directory.
+same fashion as \code{\link{get_coastal_forecast}}, provided that the files
+are all present in the directory.
 }
 \examples{
 \donttest{
@@ -72,7 +72,7 @@ Location data and other metadata come from the \acronym{BOM} anonymous
 \url{ftp://ftp.bom.gov.au/anon/home/adfd/spatial/IDM00003.dbf}
 }
 \seealso{
-get_coastal_forecast
+\link{get_coastal_forecast}
 }
 \author{
 Dean Marchiori, \email{deanmarchiori@gmail.com} and Paul Melloy

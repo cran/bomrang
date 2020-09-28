@@ -1,8 +1,8 @@
 
 #' @title Manage locally cached bomrang files
 #'
-#' @description Manage cached \pkg{bomrang} satellite imagery files with
-#' \pkg{hoardr}.
+#' @description Manage cached \CRANpkg{bomrang} satellite imagery files with
+#' \CRANpkg{hoardr}.
 #'
 #' @export
 #' @name manage_cache
@@ -32,11 +32,11 @@
 #' @examples \dontrun{
 #'
 #' # list files in cache
-#' 
+#'
 #' imagery <- get_satellite_imagery(product_id = "IDE00425",
 #'                                  scans = 1,
 #'                                  cache = TRUE)
-#' 
+#'
 #' manage_cache$list()
 #'
 #' # delete certain database files

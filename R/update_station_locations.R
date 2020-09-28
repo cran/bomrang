@@ -3,15 +3,15 @@
 #'
 #' Download the latest station locations and metadata and update internal
 #' databases that support the use of \code{\link{get_current_weather}}
-#' \code{\link{get_ag_bulletin}} and \code{\link{get_historical}}.  There is no
-#' need to use this unless you know that a station exists in BOM's database
-#' that is not available in the databases distributed with \pkg{bomrang}. In
-#' fact, for reproducibility purposes, users are discouraged from using this
-#' function.
+#' \code{\link{get_ag_bulletin}} and \code{\link{get_historical_weather}}.
+#' There is no need to use this unless you know that a station exists in
+#' \acronym{BOM}'s database that is not available in the databases distributed
+#' with \CRANpkg{bomrang}. In fact, for reproducibility purposes, users are
+#' discouraged from using this function.
 #'
-#' If \pkg{ASGS.foyer} is installed locally, this function will automatically
+#' If \CRANpkg{ASGS.foyer} is installed locally, this function will automatically
 #' check and correct any invalid state values for stations located in Australia.
-#' If \pkg{ASGS.foyer} is not installed, the function will update the internal
+#' If \CRANpkg{ASGS.foyer} is not installed, the function will update the internal
 #' database without validating the state values for stations by reported
 #' longitude/latitude location.
 #'
@@ -109,7 +109,7 @@ update_station_locations <- function() {
 
   # trim the end of the rows off that have extra info that's not in columns
   nrows <- nrow(bom_stations_raw) - 3
-  bom_stations_raw <- bom_stations_raw[1:nrows,]
+  bom_stations_raw <- bom_stations_raw[1:nrows, ]
 
   bom_stations_raw["end"][is.na(bom_stations_raw["end"])] <-
     as.integer(format(Sys.Date(), "%Y"))

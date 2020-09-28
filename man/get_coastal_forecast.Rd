@@ -9,12 +9,13 @@ get_coastal_forecast(state = "AUS")
 \arguments{
 \item{state}{Australian state or territory as full name or postal code.
 Fuzzy string matching via \code{\link[base]{agrep}} is done.  Defaults to
-"AUS" returning all state forecasts, see details for further information.}
+\dQuote{AUS} returning all state forecasts, see details for further
+information.}
 }
 \value{
 A \code{\link[data.table]{data.table}} of an Australia \acronym{BOM}
 Coastal Waters Forecast. For full details of fields and units
-returned see Appendix 5 in the \pkg{bomrang} vignette, use \cr
+returned see Appendix 5 in the \CRANpkg{bomrang} vignette, use \cr
 \code{vignette("bomrang", package = "bomrang")} to view.
 }
 \description{
@@ -24,17 +25,17 @@ of the forecast regions for a specified state or region.
 \details{
 Allowed state and territory postal codes, only one state per request
 or all using \code{AUS}.
- \describe{
-   \item{ACT}{Australian Capital Territory (will return NSW)}
-   \item{NSW}{New South Wales}
-   \item{NT}{Northern Territory}
-   \item{QLD}{Queensland}
-   \item{SA}{South Australia}
-   \item{TAS}{Tasmania}
-   \item{VIC}{Victoria}
-   \item{WA}{Western Australia}
-   \item{AUS}{Australia, returns forecast for all states, NT and ACT}
- }
+\describe{
+\item{ACT}{Australian Capital Territory (will return NSW)}
+\item{NSW}{New South Wales}
+\item{NT}{Northern Territory}
+\item{QLD}{Queensland}
+\item{SA}{South Australia}
+\item{TAS}{Tasmania}
+\item{VIC}{Victoria}
+\item{WA}{Western Australia}
+\item{AUS}{Australia, returns forecast for all states, NT and ACT}
+}
 }
 \examples{
 \donttest{
@@ -54,7 +55,7 @@ Location data and other metadata come from the \acronym{BOM} anonymous
 \url{ftp://ftp.bom.gov.au/anon/home/adfd/spatial/IDM00003.dbf}
 }
 \seealso{
-parse_coastal_forecast()
+\link{parse_coastal_forecast}
 }
 \author{
 Dean Marchiori, \email{deanmarchiori@gmail.com} and Paul Melloy

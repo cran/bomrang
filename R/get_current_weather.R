@@ -27,15 +27,15 @@
 #'
 #' Note that the column \code{local_date_time_full} is set to a
 #' \code{POSIXct} object in the local time of the \strong{user}.
-#' For more details see "Appendix 1 - Output from get_current_weather()" in
-#' the \pkg{bomrang} vignette \cr
+#' For more details see \dQuote{Appendix 1 - Output from get_current_weather()}
+#' in the \CRANpkg{bomrang} vignette \cr
 #' \code{vignette("bomrang", package = "bomrang")}\cr
 #' for a complete list of fields and units.
 #'
 #' @return A \code{bomrang_tbl} object (extension of a
 #' \code{\link[base]{data.frame}})  of requested BOM station's current and prior
 #'  72hr data. For full details of fields and units returned, see Appendix 1
-#'  in the \pkg{bomrang} vignette, use \cr
+#'  in the \CRANpkg{bomrang} vignette, use \cr
 #' \code{vignette("bomrang", package = "bomrang")} to view.
 #' @examples
 #' \donttest{
@@ -58,6 +58,8 @@
 #' Meteorology (\acronym{BOM}) webpage, Bureau of Meteorology Site Numbers:
 #' \url{http://www.bom.gov.au/climate/cdo/about/site-num.shtml}
 #'
+#' @seealso \link{get_historical_weather}
+#'
 #' @author Hugh Parsonage, \email{hugh.parsonage@@gmail.com}
 #' @importFrom magrittr use_series
 #' @importFrom magrittr %$%
@@ -72,8 +74,7 @@ get_current_weather <-
            strict = FALSE,
            latlon = NULL,
            emit_latlon_msg = TRUE) {
-    # CRAN NOTE avoidance
-    JSONurl_site_list <- end <- name <- NULL # nocov
+    JSONurl_site_list <- name <- .SD <- na_if <- NULL
     
     # Load JSON URL list
     load(system.file("extdata", "JSONurl_site_list.rda",  # nocov start
@@ -232,10 +233,19 @@ get_current_weather <-
     }
     
     if ("observations" %notin% names(observations.json) ||
-        "data" %notin% names(observations.json$observations)) {
+        "data" %notin% names(observations.json$observations) ||
+        length(observations.json$observations$data) == 0) {
+      id_code <- gsub("http://www.bom.gov.au/fwo/", "", json_url)
+      id_code <- gsub(".json", "", id_code)
+      web_url <-
+        paste0("http://www.bom.gov.au/products/", id_code, ".shtml")
       stop(
-        "\nA station was matched. ",
-        "However, the JSON returned by bom.gov.au was not in expected form.\n"
+        call. = FALSE,
+        "\nA station was matched.",
+        "\nA JSON file was found, however it was not in expected form. ",
+        "You may wish to check the BOM website for the station for further ",
+        "possible information on the station's status, ",
+        web_url
       )
     }
     
