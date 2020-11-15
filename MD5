@@ -1,7 +1,7 @@
-3d6cede0a101d1e0d509ce5ed4a0102d *DESCRIPTION
+d5f2bb4d8e009b4445cdae1c64e2d27b *DESCRIPTION
 d77d40d534ae8b83ef0938dae6536feb *LICENSE
 f3021b3ff4fe4c66905ef4e7c61aa6c2 *NAMESPACE
-80d5c7d07c8bb4e0c0f9e6eb7092d182 *NEWS.md
+576e6a9066c6fd30326b9f128cb99f37 *NEWS.md
 e0ef681901465d24f47f9139cb2c086a *R/bomrang-package.R
 ddf84eac1219183b826752719295089c *R/bomrang_tbl.R
 f0cc7548a29d84f0e0e5553f62bd5d82 *R/dplyr.R
@@ -25,12 +25,12 @@ b332b4036914b40e2edc26703e2d2721 *R/update_station_locations.R
 21aec73e1db31f510ae1e62ed64341e0 *R/utils-pipe.R
 3b0735c14ef21f5041f29164fa4d188d *R/zzz.R
 8e0b119a5da1aa6f5cff5f3953360144 *README.md
-812a6cb15b5dbdf1a21f5b197eeabeb1 *build/vignette.rds
+2d25f97d8f396a22469dcac9fffa6250 *build/vignette.rds
 0d93a90782674f399e6eb752a75f8b44 *inst/CITATION
 a49dce67c2b0a86c113bde8188d03712 *inst/doc/bomrang.Rmd
-c3032dbc50c8c397f6062ce2e64108ef *inst/doc/bomrang.html
+bdc76cf09f79f9d74c2adcd72d46e6d1 *inst/doc/bomrang.html
 d52de4eb6f132037047918d1ff0ab2ab *inst/doc/use_case.Rmd
-bbfd91de04795944479987407ac6577c *inst/doc/use_case.html
+a9badb0859f28171151221e9530b6792 *inst/doc/use_case.html
 4022d1ea590f133a9f7b0c30d1f760c2 *inst/error_images/image_error_message.png
 9fe95f405a4895855344570fe9dfb53d *inst/extdata/AAC_codes.rda
 3799f07b2a633017884eab4b95fdf697 *inst/extdata/JSONurl_site_list.rda
