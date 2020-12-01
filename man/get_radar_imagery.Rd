@@ -8,23 +8,25 @@ get_radar_imagery(product_id, path = NULL, download_only = FALSE)
 }
 \arguments{
 \item{product_id}{Character. \acronym{BOM} product ID to download and import
-as a \code{\link[raster]{raster}} object.  Value is required.}
+as a \CRANpkg{magick} object.  Value is required.}
 
 \item{path}{Character. A character string with the name where the downloaded
-file is saved. If not provided, the default value \code{NULL} is used which
-saves the file in a temp directory.}
+file is saved.  If not provided, the default value \code{NULL} is used which
+saves the file in an \R session temp directory.}
 
 \item{download_only}{Logical. Whether the radar image is loaded into the
-environment as a \code{\link[raster]{raster}} layer, or just downloaded.}
+environment as a \CRANpkg{magick} object or just downloaded.}
 }
 \value{
-A raster layer based on the most recent \verb{.gif' \acronym{radar} image snapshot published by the \acronym{BOM}. If \code{download_only = TRUE} there will be a }NULL` return value with the download path printed in the console as a
+A \CRANpkg{magick} object of the most recent \acronym{radar} image snapshot
+published by the \acronym{BOM}. If \code{download_only = TRUE} there will be
+a \code{NULL} return value with the download path printed in the console as a
 message.
 }
 \description{
 Fetch \acronym{BOM} radar imagery from
 \url{ftp://ftp.bom.gov.au/anon/gen/radar/} and return a
-\code{\link[raster]{raster}} layer object.  Files available are the most
+\code{\link[terra]{SpatRaster}} layer object.  Files available are the most
 recent radar snapshot which are updated approximately every 6 to 10 minutes.
 Suggested to check file availability first by using
 \code{\link{get_available_radar}}.
@@ -36,12 +38,8 @@ can be obtained from \code{\link{get_available_radar}}.
 \examples{
 \donttest{
 # Fetch most recent radar image for Wollongong 256km radar
-library(raster)
 imagery <- get_radar_imagery(product_id = "IDR032")
-plot(imagery)
-
-# Save imagery to a local path
-imagery <- get_radar_imagery(product_id = "IDR032", path = "image.gif")
+imagery
 }
 
 }
