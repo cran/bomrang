@@ -66,9 +66,10 @@ get_available_imagery <- function(product_id = "all") {
 #'
 #' Fetch  \acronym{BOM} satellite GeoTIFF imagery from
 #' \url{ftp://ftp.bom.gov.au/anon/gen/gms/} and return a raster
-#' \code{\link[terra]{SpatRaster}} object of 'GeoTIFF' files. Files are available at
-#' ten minute update frequency with a 24 hour delete time. Suggested to check
-#' file availability first by using \code{\link{get_available_imagery}}.
+#' \code{\link[terra]{SpatRaster}} object of 'GeoTIFF' files. Files are
+#'  available at ten minutes update frequency with a 24 hour delete time.
+#'  It is suggested to check file availability first by using
+#'  \code{\link{get_available_imagery}}.
 #'
 #' @param product_id Character.  \acronym{BOM} product ID to download in
 #' 'GeoTIFF' format and import as a \code{\link[terra]{SpatRaster}} object.  A
@@ -186,13 +187,22 @@ get_satellite_imagery <- get_satellite <-
     tif_files <- paste0(ftp_base, tif_files)
 
     # download files from server
+    
+    h <- curl::new_handle()
+    curl::handle_setopt(handle = h,
+                        FTP_RESPONSE_TIMEOUT = 200000,
+                        CONNECTTIMEOUT = 90,
+                        ftp_use_epsv = TRUE
+    )
+    
     tryCatch({
       Map(
         function(urls, destination)
           curl::curl_download(urls,
             destination,
             mode = "wb",
-            quiet = TRUE
+            quiet = TRUE,
+            handle = h
           ),
         tif_files,
         file.path(cache_dir, basename(tif_files))
@@ -260,11 +270,28 @@ get_satellite_imagery <- get_satellite <-
 
 #' @noRd
 .ftp_images <- function(product_id, bom_server) {
-  # setup internal variables
+  # define custom useragent and handle for communicating with BOM servers
+  USERAGENT <- paste0("{bomrang} R package (",
+                      utils::packageVersion("bomrang"),
+                      ") https://github.com/ropensci/bomrang")
+  # set a custom user-agent, restore original settings on exit
+  # required for #130 - BOM returns 403 for RStudio
+  op <- options()
+  on.exit(options(op))
+  options(HTTPUserAgent = USERAGENT)
+  
+  # BOM's FTP server can timeout too quickly
+  # Also, BOM's http server sometimes sends a http response of 200, "all good",
+  # but then will not actually serve the requested file, so we want to set a max
+  # time limit for the complete process to complete as well.
   list_files <- curl::new_handle()
-  curl::handle_setopt(list_files,
-    ftp_use_epsv = TRUE,
-    dirlistonly = TRUE
+  curl::handle_setopt(handle = list_files,
+                      FTP_RESPONSE_TIMEOUT = 60L,
+                      CONNECTTIMEOUT = 60L,
+                      TIMEOUT = 120L,
+                      USERAGENT = USERAGENT,
+                      ftp_use_epsv = TRUE,
+                      dirlistonly = TRUE
   )
 
   # get file list from FTP server

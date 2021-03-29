@@ -9,11 +9,11 @@
 #' with \CRANpkg{bomrang}. In fact, for reproducibility purposes, users are
 #' discouraged from using this function.
 #'
-#' If \CRANpkg{ASGS.foyer} is installed locally, this function will automatically
-#' check and correct any invalid state values for stations located in Australia.
-#' If \CRANpkg{ASGS.foyer} is not installed, the function will update the internal
-#' database without validating the state values for stations by reported
-#' longitude/latitude location.
+#' If \CRANpkg{ASGS.foyer} is installed locally, this function will
+#' automatically check and correct any invalid state values for stations located
+#' in Australia.  If \CRANpkg{ASGS.foyer} is not installed, the function will
+#' update the internal database without validating the state values for stations
+#' by reported longitude/latitude location.
 #'
 #' @examples
 #' \dontrun{
@@ -64,7 +64,7 @@ update_station_locations <- function() {
   },
   error = function(x)
     stop(
-      "\nThe server with the location information is not responding.",
+      "\nThe server with the location information is not responding. ",
       "Please retry again later.\n",
       call. = FALSE
     ))

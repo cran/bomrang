@@ -11,9 +11,8 @@
 
 #' Get response from a BOM URL
 #'
-#' Gets response from a BOM URL, checks for response first, then
-#' tries to fetch the data or returns an informative message, failing
-#' gracefully per CRAN policies.
+#' Gets response from a BOM URL, checks the server for response first, then
+#' tries to fetch the file or returns an informative message.
 #'
 #' @param remote_file file resource being requested from BOM
 #'
@@ -24,42 +23,70 @@
 #' @noRd
 #'
 .get_url <- function(remote_file) {
+  
+  # define custom useragent and handle for communicating with BOM servers
+  USERAGENT <- paste0("{bomrang} R package (",
+                      utils::packageVersion("bomrang"),
+                      ") https://github.com/ropensci/bomrang")
+  # set a custom user-agent, restore original settings on exit
+  # required for #130 - BOM returns 403 for RStudio
+  op <- options()
+  on.exit(options(op))
+  options(HTTPUserAgent = USERAGENT)
+  
+  # BOM's FTP server can timeout too quickly
+  # Also, BOM's http server sometimes sends a http response of 200, "all good",
+  # but then will not actually serve the requested file, so we want to set a max
+  # time limit for the complete process to complete as well.
+  h <- curl::new_handle()
+  curl::handle_setopt(
+    handle = h,
+    FTP_RESPONSE_TIMEOUT = 60L,
+    CONNECTTIMEOUT = 60L,
+    TIMEOUT = 120L,
+    USERAGENT = USERAGENT
+  )
+  
   try_GET <- function(x, ...) {
     tryCatch({
-      response = curl::curl_fetch_memory(url = x,
-                                         handle = curl::new_handle())
+      response = curl::curl_fetch_memory(url = x, handle = h)
     },
     error = function(e)
       conditionMessage(e),
     warning = function(w)
       conditionMessage(w))
   }
+  
   # a proper response will return a list class object
   # otherwise a timeout will just be a character string
   is_response <- function(x) {
     inherits(x, "list")
   }
-
-  # First check internet connection
+  
+  # First check Internet connection
   if (!curl::has_internet()) {
-    message("No Internet connection.")
-    return(invisible(NULL))
+    stop(call. = FALSE,
+         "No Internet connection.")
   }
-
+  
   resp <- try_GET(x = remote_file)
-  # Then stop if status > 400
-  if (as.integer(resp$status_code) == 404) {
+  
+  # check for possible timeout message and stop if that's the case
+  if (!is_response(resp)) {
+    stop(call. = FALSE,
+         resp) # return char string value server provides
+  }
+  
+  # Then stop if status indicates file not found
+  if (as.integer(resp$status_code) == 404 |
+      as.integer(resp$status_code) == 550) {
     stop(
       call. = FALSE,
       "\nA file or station was matched. However, a corresponding file was not ",
       "found at bom.gov.au.\n"
     )
-  } # Then check for timeout problems
-  if (!is_response(resp)) {
-    message(resp) # return char string value server provides
-    return(invisible(NULL))
   }
-
+  
   if (tools::file_ext(remote_file) == "xml") {
     xml_out <- xml2::read_xml(rawToChar(resp$content))
     return(xml_out)
@@ -69,21 +96,28 @@
       jsonlite::fromJSON(rawToChar(resp$content))
     return(json_out)
   }
+  if (grepl(pattern = "dailyZippedDataFile", x = remote_file)) {
+    csv_out <-
+      data.table::fread(input = remote_file,
+                        header = TRUE,
+                        stringsAsFactors = TRUE)
+    return(csv_out)
+  }
 }
 
 # Distance over a great circle. Reasonable approximation.
 .haversine_distance <- function(lat1, lon1, lat2, lon2) {
   # to radians
-  lat1 <- lat1 * pi / 180
-  lat2 <- lat2 * pi / 180
-  lon1 <- lon1 * pi / 180
-  lon2 <- lon2 * pi / 180
-
+  lat1 <- lat1 * 0.01745
+  lat2 <- lat2 * 0.01745
+  lon1 <- lon1 * 0.01745
+  lon2 <- lon2 * 0.01745
+  
   delta_lat <- abs(lat1 - lat2)
   delta_lon <- abs(lon1 - lon2)
-
+  
   # radius of earth
-  6371 * 2 * asin(sqrt(`+`(
+  12742 * asin(sqrt(`+`(
     (sin(delta_lat / 2)) ^ 2,
     cos(lat1) * cos(lat2) * (sin(delta_lon / 2)) ^ 2
   )))
@@ -109,7 +143,7 @@
 
 .check_states <- function(state) {
   state <- toupper(state)
-
+  
   states <- c(
     "ACT",
     "NSW",
@@ -132,7 +166,7 @@
     "AUS",
     "OZ"
   )
-
+  
   if (state %in% states) {
     the_state <- state
     return(the_state)
@@ -140,7 +174,7 @@
     likely_states <- agrep(pattern = state,
                            x = states,
                            value = TRUE)
-
+    
     if (length(likely_states) == 1) {
       the_state <- toupper(likely_states)
       message(
@@ -159,7 +193,7 @@
       )
     }
   }
-
+  
   if (length(likely_states) > 1) {
     message(
       "Multiple states match state.",
@@ -182,7 +216,7 @@
   state <- gsub(" ", "", state)
   state <-
     substring(gsub("[[:punct:]]", "", tolower(state)), 1, 2)
-
+  
   state_code <- c(
     "AUS",
     "AUS",
@@ -230,10 +264,10 @@
     "nt"
   )
   state <- state_code[pmatch(state, state_names)]
-
+  
   if (any(is.na(state)))
     stop("Unable to determine state")
-
+  
   return(state)
 }
 
@@ -248,21 +282,20 @@
 #' @noRd
 
 .split_time_cols <- function(x) {
+  .SD <- start_time_local <- end_time_local <- NULL
   
-  .SD<- start_time_local<- end_time_local <- NULL
-    
   x[, c("start_time_local",
         "UTC_offset_drop") := data.table::tstrsplit(start_time_local,
                                                     "+",
                                                     fixed = TRUE)]
-
+  
   x[, c("end_time_local",
         "utc_offset") := data.table::tstrsplit(end_time_local,
                                                "+",
                                                fixed = TRUE)]
-
+  
   x[, "UTC_offset_drop" := NULL]
-
+  
   # remove the "T" from time cols
   x[, c("start_time_local",
         "end_time_local",
@@ -273,7 +306,7 @@
                 "end_time_local",
                 "start_time_utc",
                 "end_time_utc")]
-
+  
   # remove the "Z" from UTC cols
   x[, c("start_time_utc", "end_time_utc") := lapply(.SD, gsub, pattern = "Z",
                                                     replacement = ""),

@@ -20,21 +20,21 @@
 #'   station/product type, with some subset of the following columns:
 #'
 #'   \tabular{rl}{
-#'   **Product_code**:\tab BOM internal code.\cr
-#'   **Station_number**:\tab BOM station ID.\cr
-#'   **Year**:\tab Year of observation (YYYY).\cr
-#'   **Month**:\tab Month of observation (1-12).\cr
-#'   **Day**:\tab Day of observation (1-31).\cr
-#'   **Min_temperature**:\tab Minimum daily recorded temperature (degrees C).\cr
-#'   **Max_temperature**:\tab Maximum daily recorded temperature (degrees C).\cr
-#'   **Accum_days_min**:\tab Accumulated number of days of minimum
+#'   **product_code**:\tab BOM internal code.\cr
+#'   **station_number**:\tab BOM station ID.\cr
+#'   **year**:\tab Year of observation (YYYY).\cr
+#'   **month**:\tab Month of observation (1-12).\cr
+#'   **day**:\tab Day of observation (1-31).\cr
+#'   **min_temperature**:\tab Minimum daily recorded temperature (degrees C).\cr
+#'   **max_temperature**:\tab Maximum daily recorded temperature (degrees C).\cr
+#'   **accum_days_min**:\tab Accumulated number of days of minimum
 #'    temperature.\cr
-#'   **Accum_days_max**:\tab Accumulated number of days of maximum
+#'   **accum_days_max**:\tab Accumulated number of days of maximum
 #'   temperature.\cr
-#'   **Rainfall**:\tab Daily recorded rainfall in mm.\cr
-#'   **Period**:\tab Period over which rainfall was measured.\cr
-#'   **Solar_exposure**:\tab Daily global solar exposure in MJ/m^2.\cr
-#'   **Quality**:\tab Y, N, or missing. Data which have not yet completed the\cr
+#'   **rainfall**:\tab Daily recorded rainfall in mm.\cr
+#'   **period**:\tab Period over which rainfall was measured.\cr
+#'   **solar_exposure**:\tab Daily global solar exposure in MJ/m^2.\cr
+#'   **quality**:\tab Y, N, or missing. Data which have not yet completed the\cr
 #'               \tab routine quality control process are marked accordingly.
 #'   }
 #'
@@ -176,6 +176,8 @@ get_historical_weather <- get_historical <-
                                "quality"),
                       solar = c("solar_exposure")
                     ))
+    dat[["station_number"]] <- sprintf("%06d",
+                                       as.integer(dat[["station_number"]]))
     
     return(
       structure(
@@ -222,6 +224,15 @@ get_historical <- get_historical_weather
 #' @noRd
 
 .get_ncc <- function() {
+  
+  # set a custom user-agent, restore original settings on exit
+  # required for #130 - BOM returns 403 for RStudio
+  op <- options()
+  on.exit(options(op))
+  options(HTTPUserAgent = paste0("{bomrang} R package (",
+                                 utils::packageVersion("bomrang"),
+                                 ") https://github.com/ropensci/bomrang"))
+  
   # CRAN NOTE avoidance
   site <- name <- lat <- lon <- start_month <- #nocov start
     start_year <-
@@ -249,8 +260,8 @@ get_historical <- get_historical_weather
     # read the station list in as a vector first so that we can
     # detect and remove the header and footer...
     ncc <- readLines(weather[i])
-    header_start <- grep('^\\-+$', ncc) + 1L
-    footer_start <- grep('^[0-9]+ stations', ncc) - 1L
+    header_start <- grep("^\\-+$", ncc) + 1L
+    footer_start <- grep("^[0-9]+ stations", ncc) - 1L
     
     if (length(header_start > 0) && length(footer_start > 0)) {
       # ... then process it as a data frame
@@ -368,8 +379,31 @@ get_historical <- get_historical_weather
 #' @author Jonathan Carroll, \email{rpkg@@jcarroll.com.au}
 #' @noRd
 .get_zip_and_load <- function(url) {
+  
+  USERAGENT <- paste0("{bomrang} R package (",
+                      utils::packageVersion("bomrang"),
+                      ") https://github.com/ropensci/bomrang")
+  # set a custom user-agent, restore original settings on exit
+  # required for #130 - BOM returns 403 for RStudio
+  op <- options()
+  on.exit(options(op))
+  options(HTTPUserAgent = USERAGENT)
+  
+  # BOM's FTP server can timeout too quickly
+  # Also, BOM's http server sometimes sends a http response of 200, "all good",
+  # but then will not actually serve the requested file, so we want to set a max
+  # time limit for the complete process to complete as well.
+  h <- curl::new_handle()
+  curl::handle_setopt(
+    handle = h,
+    FTP_RESPONSE_TIMEOUT = 60L,
+    CONNECTTIMEOUT = 60L,
+    TIMEOUT = 120L,
+    USERAGENT = USERAGENT
+  )
+  
   tmp <- tempfile(fileext = ".zip")
-  curl::curl_download(url, tmp, mode = "wb", quiet = TRUE)
+  curl::curl_download(url, tmp, mode = "wb", quiet = TRUE, handle = h)
   zipped <- utils::unzip(tmp, exdir = dirname(tmp))
   unlink(tmp)
   datfile <- grep("Data.csv", zipped, value = TRUE)
